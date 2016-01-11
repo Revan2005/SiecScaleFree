@@ -1,11 +1,15 @@
 import java.util.Random;
 
 public class GeneratorKrawedzi {
+	// czesc do nicjalizacji odpowiada parametrowi m0 algorytmu Barabasi Alberta
+	//tam to jest jako liczba a nie procent i musi zachodzic m <= m0
 	private final double CZESC_DO_INICJALIZACJI = 0.1;
 	int liczbaWezlow;
 	int liczbaWezlowWPodgrafie;
 	int liczbaPozostalychWezlow;
 	private Graf graf;
+	//parametr algorytmu Barabasi Alberta
+	private final int m = 4;
 	
 	public void generujKrawedzie(Graf graf, int liczbaKrawedzi){
 		this.graf = graf;
@@ -37,7 +41,7 @@ public class GeneratorKrawedzi {
 		 */
 		for(int nowy = liczbaWezlowWPodgrafie; nowy < liczbaWezlow; nowy++){
 			int dodaneKrawedzie = 0;
-			while( dodaneKrawedzie < 1  ){
+			while( dodaneKrawedzie < m ){
 				int gdzieSieDolaczyc = losujGdzieSiePrzylaczyc();
 				if( !graf.czyPolaczone(nowy, gdzieSieDolaczyc) ){
 					graf.dodajKrawedz(nowy, gdzieSieDolaczyc);
