@@ -19,8 +19,54 @@ public class Graf {
 		inicjalizujListeOsobnikow();
 	}
 	
+	public int[] getTablicaStopniWierzcholkow(){
+		int[] tablicaStopniWierzcholkow = new int[listaPolaczen.size()];
+		for(int i=0; i<listaPolaczen.size(); i++){
+			tablicaStopniWierzcholkow[i] = listaPolaczen.get(i).size();
+		}
+		return tablicaStopniWierzcholkow;
+	}
+	
+	public int getLiczbaChorych(){
+		int liczbaChorych = 0;
+		for(int i=0; i<liczbaWezlow; i++){
+			if(getStanZdrowiaOsobnika(i).equals(StanOsobnika.CHORY))
+				liczbaChorych++;
+		}
+		return liczbaChorych;
+	}
+	
+	public int getLiczbaZdrowych(){
+		int liczbaZdrowych = 0;
+		for(int i=0; i<liczbaWezlow; i++){
+			if(getStanZdrowiaOsobnika(i).equals(StanOsobnika.ZDROWY))
+				liczbaZdrowych++;
+		}
+		return liczbaZdrowych;
+	}
+	
+	public int getLiczbaOdpornych(){
+		int liczbaOdpornych = 0;
+		for(int i=0; i<liczbaWezlow; i++){
+			if(getStanZdrowiaOsobnika(i).equals(StanOsobnika.ODPORNY))
+				liczbaOdpornych++;
+		}
+		return liczbaOdpornych;
+	}
+	
+	public Osobnik getOsobnik(int indexOsobnika){
+		return listaOsobnikow.get(indexOsobnika);
+	}
+	
+	public ArrayList<Integer> getListaSasiadowOsobnika(int indexOsobnika){
+		return listaPolaczen.get(indexOsobnika);
+	}
+	
 	private void inicjalizujListeOsobnikow(){
 		listaOsobnikow = new ArrayList<Osobnik>();
+		for(int i=0; i<liczbaWezlow; i++){
+			listaOsobnikow.add(new Osobnik(StanOsobnika.ZDROWY));
+		}
 	}
 	
 	public boolean czyPolaczone(int wezel1, int wezel2){
