@@ -1,6 +1,5 @@
 package glowny;
 import java.util.ArrayList;
-import java.util.Random;
 
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
 

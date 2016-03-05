@@ -1,6 +1,4 @@
 package generatoryKrawedzi;
-import java.util.Random;
-
 import glowny.Graf;
 
 public class GeneratorKrawedziSmallWorld implements GeneratorKrawedzi{

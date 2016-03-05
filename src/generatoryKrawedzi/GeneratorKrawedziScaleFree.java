@@ -1,6 +1,7 @@
 package generatoryKrawedzi;
 import java.util.Random;
-import glowny.*;
+
+import glowny.Graf;
 
 
 
