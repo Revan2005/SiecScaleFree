@@ -1,5 +1,6 @@
 package glowny;
 import java.util.Arrays;
+import plot.*;
 
 public class PanelSterowania {
 	private static Graf graf;
@@ -21,6 +22,9 @@ public class PanelSterowania {
 		System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
 		System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
 		System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+		
+		Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
+		
 		int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1];
 		System.out.println((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
 
