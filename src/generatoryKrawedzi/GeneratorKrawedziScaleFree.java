@@ -14,16 +14,25 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 		int liczbaPozostalychWezlow;
 		private Graf graf;
 		//parametr algorytmu Barabasi Alberta
-		private final int m = 4;
+		// m to sredni stopien wierzcholka w grafie
+		private int m;
 		
 		@Override
 		public void generujKrawedzie(Graf graf, int liczbaKrawedzi){
 			this.graf = graf;
 			liczbaWezlow = graf.getLiczbaWezlow();
+			//na podstawie oczekiwanej liczby krawedzi wyliczam wartosc m 
+			// to jest liczba krawedzi przypadajaca na 1 wierzcholek srednio
+			//suma stopni wierzcholkow = l.wierzcholkow*2
+			//sredni stopien = suma stopni / liczba wierzch
+			m = (int) Math.round( (double)liczbaKrawedzi / liczbaWezlow );	
+			
+		
 			liczbaWezlowWPodgrafie = (int)(liczbaWezlow * CZESC_DO_INICJALIZACJI);
 			liczbaPozostalychWezlow = (int)(liczbaWezlow * (1 - CZESC_DO_INICJALIZACJI));
 			inicjalizujMalyPodGrafLosowy( (int)(liczbaKrawedzi * CZESC_DO_INICJALIZACJI) );
-			dodajPozostaleKrawedzie( (int)(liczbaKrawedzi * (1-CZESC_DO_INICJALIZACJI)) );
+			//dodajPozostaleKrawedzie( (int)(liczbaKrawedzi * (1-CZESC_DO_INICJALIZACJI)) );
+			dodajPozostaleKrawedzie();
 		}
 		
 		private void inicjalizujMalyPodGrafLosowy(int liczbaKrawedzi){
@@ -39,19 +48,19 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			}
 		}
 		
-		private void dodajPozostaleKrawedzie(int liczbaKrawedzi){
+		private void dodajPozostaleKrawedzie(){	
 			// na razie najprosciej 
 			/*ppb ze nowy jest polaczony z itym
 			 * = stopien tego wierzcholka
 			 * przez sume wszystkich stopni wierzcholkow
 			 */
 			for(int nowy = liczbaWezlowWPodgrafie; nowy < liczbaWezlow; nowy++){
-				int dodaneKrawedzie = 0;
-				while( dodaneKrawedzie < m ){
+				int krawedzieDodaneDoNowegoWierzcholka = 0;
+				while( krawedzieDodaneDoNowegoWierzcholka < m ){
 					int gdzieSieDolaczyc = losujGdzieSiePrzylaczyc();
 					if( !graf.czyPolaczone(nowy, gdzieSieDolaczyc) ){
 						graf.dodajKrawedz(nowy, gdzieSieDolaczyc);
-						dodaneKrawedzie++;
+						krawedzieDodaneDoNowegoWierzcholka++;
 					}
 				}
 			}

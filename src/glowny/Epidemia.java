@@ -29,6 +29,15 @@ public class Epidemia {
 		return odporni;
 	}
 	
+	public int[] getZachorowalnoscKazdegoDnia(){
+		int[] zachorowalnoscKazdegoDnia = new int[chorzy.length];
+		zachorowalnoscKazdegoDnia[0] = chorzy[0];
+		for(int i=1; i<chorzy.length; i++){
+			zachorowalnoscKazdegoDnia[i] = zdrowi[i-1] - zdrowi[i];
+		}
+		return zachorowalnoscKazdegoDnia;
+	}
+	
 	private void ustalPoczatkowaGrupeChorych(int poczatkowaLiczbaChorych){
 		Random rand = new Random();
 		int liczbaZakazonych = 0;
