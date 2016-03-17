@@ -25,50 +25,27 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			// to jest liczba krawedzi przypadajaca na 1 wierzcholek srednio
 			//suma stopni wierzcholkow = l.wierzcholkow*2
 			//sredni stopien = suma stopni / liczba wierzch
-			m = (int) Math.round( (double)liczbaKrawedzi / liczbaWezlow );	
 			
-		
 			liczbaWezlowWPodgrafie = (int)(liczbaWezlow * CZESC_DO_INICJALIZACJI);
-			liczbaPozostalychWezlow = (int)(liczbaWezlow * (1 - CZESC_DO_INICJALIZACJI));
-			inicjalizujMalyPodGrafLosowy( (int)(liczbaKrawedzi * CZESC_DO_INICJALIZACJI) );
-			//dodajPozostaleKrawedzie( (int)(liczbaKrawedzi * (1-CZESC_DO_INICJALIZACJI)) );
-			dodajPozostaleKrawedzie();
-		}
-		
-		private void inicjalizujMalyPodGrafLosowy(int liczbaKrawedzi){
-			Random rand = new Random();
-			int dodaneKrawedzie = 0;
-			while( dodaneKrawedzie < liczbaKrawedzi ){
-				int wezel1 = rand.nextInt(liczbaWezlowWPodgrafie);
-				int wezel2 = rand.nextInt(liczbaWezlowWPodgrafie);
-				if( !graf.czyPolaczone(wezel1, wezel2) ){
-					graf.dodajKrawedz(wezel1, wezel2);
-					dodaneKrawedzie++;
-				}
-			}
-		}
-		
-		private void dodajPozostaleKrawedzie(){	
-			// na razie najprosciej 
-			/*ppb ze nowy jest polaczony z itym
-			 * = stopien tego wierzcholka
-			 * przez sume wszystkich stopni wierzcholkow
-			 */
-			for(int nowy = liczbaWezlowWPodgrafie; nowy < liczbaWezlow; nowy++){
+			m = (int) Math.round( (double)liczbaKrawedzi / (liczbaWezlow - liczbaWezlowWPodgrafie) );	
+			
+			
+			for(int aktualnieDodawany = liczbaWezlowWPodgrafie; aktualnieDodawany < liczbaWezlow; aktualnieDodawany++){
 				int krawedzieDodaneDoNowegoWierzcholka = 0;
 				while( krawedzieDodaneDoNowegoWierzcholka < m ){
-					int gdzieSieDolaczyc = losujGdzieSiePrzylaczyc();
-					if( !graf.czyPolaczone(nowy, gdzieSieDolaczyc) ){
-						graf.dodajKrawedz(nowy, gdzieSieDolaczyc);
+					int gdzieSieDolaczyc = losujGdzieSiePrzylaczyc(aktualnieDodawany);
+					if( !graf.czyPolaczone(aktualnieDodawany, gdzieSieDolaczyc) ){
+						graf.dodajKrawedz(aktualnieDodawany, gdzieSieDolaczyc);
 						krawedzieDodaneDoNowegoWierzcholka++;
 					}
 				}
 			}
+
 		}
 		
-		private int losujGdzieSiePrzylaczyc(){
+		private int losujGdzieSiePrzylaczyc(int aktualnieDodawany){
 			Random rand = new Random();
-			double[] dystrybuanta = getDystrybuanta();
+			double[] dystrybuanta = getDystrybuanta(aktualnieDodawany);
 			double losowa = rand.nextDouble();
 			for(int i = 0; i < dystrybuanta.length; i++){
 				if( dystrybuanta[i] > losowa ){
@@ -78,23 +55,24 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			return dystrybuanta.length - 1;
 		}
 		
-		private double[] getDystrybuanta(){
-			double[] rozklad = new double[graf.getLiczbaWezlow()]; 
-			int sumaStopniWierzcholkow = obliczSumeStopniWierzcholkow();
-			for( int i = 0; i < graf.getLiczbaWezlow(); i++ ){
-				rozklad[i] = (double)graf.getStopienWierzcholka(i) / sumaStopniWierzcholkow;
+		private double[] getDystrybuanta(int aktualnieDodawany){
+			int liczbaWezlowWDotychczasWygenerowanymGrafie = aktualnieDodawany - 1;
+			double[] rozklad = new double[liczbaWezlowWDotychczasWygenerowanymGrafie]; 
+			int sumaStopniWierzcholkow = obliczSumeStopniWierzcholkow(liczbaWezlowWDotychczasWygenerowanymGrafie);
+			for( int i = 0; i < liczbaWezlowWDotychczasWygenerowanymGrafie; i++ ){
+				rozklad[i] = ((double)graf.getStopienWierzcholka(i) + 1) / (sumaStopniWierzcholkow + liczbaWezlowWDotychczasWygenerowanymGrafie);
 			}
-			double[] dystrybuanta = new double[graf.getLiczbaWezlow()]; 
+			double[] dystrybuanta = new double[liczbaWezlowWDotychczasWygenerowanymGrafie]; 
 			dystrybuanta[0] = rozklad[0];
-			for( int i = 1; i < graf.getLiczbaWezlow(); i++ ){
+			for( int i = 1; i < liczbaWezlowWDotychczasWygenerowanymGrafie; i++ ){
 				dystrybuanta[i] = dystrybuanta[i-1] + rozklad[i];
 			}
 			return dystrybuanta;
 		}
 		
-		private int obliczSumeStopniWierzcholkow(){
+		private int obliczSumeStopniWierzcholkow(int liczbaWierzcholkow){
 			int suma = 0;
-			for(int i = 0; i < graf.getLiczbaWezlow(); i++){
+			for(int i = 0; i < liczbaWierzcholkow; i++){
 				suma += graf.getStopienWierzcholka(i);
 			}
 			return suma;
