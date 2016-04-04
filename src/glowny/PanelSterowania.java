@@ -26,17 +26,30 @@ public class PanelSterowania {
 		typSieci = TypSieci.SCALE_FREE;
 		//listowy dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
 		liczbaZaszczepionych = 200;
-		strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
-		prawdopodobienstwoZarazenia = 0.015;
+		//strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
+		//strategiaSzczepienia = StrategiaSzczepienia.OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM;
+		//strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_LOSOWEGO_ZNAJOMEGO;
+		strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM;
+		/* to ostatnie rozni sie znacznie od strategii zaszczeposobnikiznajwyzszymstopniem
+		 * bo tu nie wykorzystujemy wiedzy a priori o topologii sieci
+		 * tylko pozyskujemy ja tak jak to mozna zrobic w zyciu
+		 * dzwonimy po ludziach i pytamy o popularnych znajomych :D
+		 */
+		
+		prawdopodobienstwoZarazenia = 0.02;
 		czasTrwaniaChorobyWDniach = 7;
 		liczbaDni = 100;
 		
+		/*
 		for(double i=0.010; i<0.021; i+=0.001){
 			prawdopodobienstwoZarazenia = i;
 			System.out.println("Prawdopodobieństwo zarażenia = " + prawdopodobienstwoZarazenia);
 			powtorzEpidemieNRazy( 100 );
 			System.out.println("\n\n");
 		}
+		*/
+		
+		powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(1);
 		
 	}
 	

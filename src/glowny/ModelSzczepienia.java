@@ -1,4 +1,5 @@
 package glowny;
+import java.util.List;
 import java.util.Random;
 
 public abstract class ModelSzczepienia {
@@ -10,6 +11,12 @@ public abstract class ModelSzczepienia {
 				break;
 			case OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM:
 				zaszczepOsobnikiZMaxStopniem(populacja, liczbaOsobnikow);
+				break;
+			case WSKAZ_LOSOWEGO_ZNAJOMEGO:
+				zaszczepWskazanychLosowoZnajomych(populacja, liczbaOsobnikow);
+				break;
+			case WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM:
+				zaszczepWskazanychZnajomychZNajwyzszymStopniem(populacja, liczbaOsobnikow);
 				break;
 			default:
 				break;
@@ -41,6 +48,50 @@ public abstract class ModelSzczepienia {
 			//unikam nieskonczonej petli, albo zaszczepiania tylko pierwszego osobnika
 			stopnieWierzcholkow[indexOsobnikaZMaxKontaktami] = -1;
 		}	
+	}
+	
+	private static void zaszczepWskazanychLosowoZnajomych(Graf populacja, int liczbaOsobnikow){
+		Random rand = new Random();
+		int liczbaZaszczepionych = 0;
+		while(liczbaZaszczepionych < liczbaOsobnikow){
+			int indexOsobnikaDoKtoregoDzwonimy = rand.nextInt(populacja.getLiczbaWezlow());
+			List<Integer> listaZnajomych = populacja.getListaSasiadowOsobnika(indexOsobnikaDoKtoregoDzwonimy);
+			if(listaZnajomych.size() < 1){
+				continue;
+			}
+			int pozycjaWskazanegoZnajomegoNaLiscie = rand.nextInt(listaZnajomych.size());
+			int indexWskazanegoOsobnika = listaZnajomych.get(pozycjaWskazanegoZnajomegoNaLiscie);
+			if(populacja.getStanZdrowiaOsobnika(indexWskazanegoOsobnika).equals(StanOsobnika.ZDROWY)){
+				populacja.setStanZdrowiaOsobnika(indexWskazanegoOsobnika, StanOsobnika.ODPORNY);
+				liczbaZaszczepionych++;
+			}
+		}
+	}
+	
+	private static void zaszczepWskazanychZnajomychZNajwyzszymStopniem(Graf populacja, int liczbaOsobnikow){
+		Random rand = new Random();
+		int liczbaZaszczepionych = 0;
+		while(liczbaZaszczepionych < liczbaOsobnikow){
+			int indexOsobnikaDoKtoregoDzwonimy = rand.nextInt(populacja.getLiczbaWezlow());
+			List<Integer> listaZnajomych = populacja.getListaSasiadowOsobnika(indexOsobnikaDoKtoregoDzwonimy);
+			if(listaZnajomych.size() < 1){
+				continue;
+			}
+			int najwyzszyStopienZnajomegoZListy = 0;
+			int indexWskazanegoOsobnika = 0;
+			int indexZnajomegoWPopulacji;
+			for(int i=0; i<listaZnajomych.size(); i++){
+				indexZnajomegoWPopulacji = listaZnajomych.get(i);
+				if(populacja.getStopienWierzcholka(indexZnajomegoWPopulacji) > najwyzszyStopienZnajomegoZListy){
+					indexWskazanegoOsobnika = indexZnajomegoWPopulacji;
+					najwyzszyStopienZnajomegoZListy = populacja.getStopienWierzcholka(indexZnajomegoWPopulacji);
+				}
+			}
+			if(populacja.getStanZdrowiaOsobnika(indexWskazanegoOsobnika).equals(StanOsobnika.ZDROWY)){
+				populacja.setStanZdrowiaOsobnika(indexWskazanegoOsobnika, StanOsobnika.ODPORNY);
+				liczbaZaszczepionych++;
+			}
+		}
 	}
 	
 	private static int getIndexOfMaxValue(int[] tablica){

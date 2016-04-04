@@ -25,6 +25,14 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			// to jest liczba krawedzi przypadajaca na 1 wierzcholek srednio
 			//suma stopni wierzcholkow = l.wierzcholkow*2
 			//sredni stopien = suma stopni / liczba wierzch
+			//liczba krawedzi a wiec i suma stopni wierzcholkow bedzie inna ni
+			//ta podana jako parametr w panelu sterowania
+			/*wynika to z tego ze oryginalny algorytm wymaga parametru m
+			 * wyliczam go na podstawie oczekiwanej liczby krawedzi
+			 * ale pojawiaja sie bledy zaokraglen
+			 * ale to juz kwestia zgodnosci z oryginalnym algorytmem
+			 * 
+			 */
 			
 			liczbaWezlowWPodgrafie = (int)(liczbaWezlow * CZESC_DO_INICJALIZACJI);
 			m = (int) Math.round( (double)liczbaKrawedzi / (liczbaWezlow - liczbaWezlowWPodgrafie) );	
