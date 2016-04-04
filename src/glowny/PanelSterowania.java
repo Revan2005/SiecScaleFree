@@ -4,6 +4,15 @@ import plot.*;
 
 public class PanelSterowania {
 	private static Graf graf;
+	private static int liczbaOsobnikow;
+	private static int liczbaKrawedzi;
+	private static int poczatkowaLiczbaChorych;
+	private static TypSieci typSieci;
+	private static int liczbaZaszczepionych;
+	private static StrategiaSzczepienia strategiaSzczepienia;
+	private static double prawdopodobienstwoZarazenia;
+	private static int czasTrwaniaChorobyWDniach;
+	private static int liczbaDni;
 	
 	public static void main(String[] args) {
 		
@@ -11,40 +20,156 @@ public class PanelSterowania {
 		 * kiedy dodalem 1 to wykres chorych sie znacznie splaszczyl - podoba mi sie 
 		 * przypomina chyba bardziej rzeczywiste
 		 */
-		int liczbaOsobnikow = 10000;
-		int liczbaKrawedzi = 50000; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
-		int poczatkowaLiczbaChorych = 10;
-		TypSieci typSieci = TypSieci.SCALE_FREE;
-		
+		liczbaOsobnikow = 10000;
+		liczbaKrawedzi = 50000; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
+		poczatkowaLiczbaChorych = 10;
+		typSieci = TypSieci.SCALE_FREE;
 		//listowy dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
-		graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+		liczbaZaszczepionych = 200;
+		strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
+		prawdopodobienstwoZarazenia = 0.015;
+		czasTrwaniaChorobyWDniach = 7;
+		liczbaDni = 100;
 		
-		int sumaStopniWierzcholkow = 0;
-		int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
-		for(int i=0; i<tablicaStopniWierzcholkow.length; i++)
-			sumaStopniWierzcholkow += tablicaStopniWierzcholkow[i];
-		System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
-		//for(int i=0; i<100; i++)
-		//	System.out.println( graf.getListaSasiadowOsobnika(i) );
+		for(double i=0.010; i<0.021; i+=0.001){
+			prawdopodobienstwoZarazenia = i;
+			System.out.println("Prawdopodobieństwo zarażenia = " + prawdopodobienstwoZarazenia);
+			powtorzEpidemieNRazy( 100 );
+			System.out.println("\n\n");
+		}
 		
-		int liczbaZaszczepionych = 30;
-		double prawdopodobienstwoZarazenia = 0.012;
-		int czasTrwaniaChorobyWDniach = 7;
-		ModelSzczepienia.zaszczepLosowo(graf, liczbaZaszczepionych);
-		//ModelSzczepienia.zaszczepOsobnikiZMaxStopniem(graf, liczbaZaszczepionych);
-		Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
-		int liczbaDni = 360;
-		epidemia.start(liczbaDni);
-		System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
-		System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
-		System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
-		System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+	}
+	
+	public static void powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(int n){
+		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
-		Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
-		
-		int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1];
-		System.out.println((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
+		for(int i=0; i<n; i++){
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			
+			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			int sumaStopniWierzcholkow = 0;
+			int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
+			for(int j=0; j<tablicaStopniWierzcholkow.length; j++)
+				sumaStopniWierzcholkow += tablicaStopniWierzcholkow[j];
+			System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
+			//for(int i=0; i<100; i++)
+			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
+			
+			
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			
+			epidemia.start(liczbaDni);
+			System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			
+			//Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
+			Plotter.plot(
+					epidemia.getLiczbyZdrowychKazdegoDnia(), 
+					epidemia.getLiczbyChorychKazdegoDnia(), 
+					epidemia.getLiczbyOdpornychKazdegoDnia(),
+					epidemia.getZachorowalnoscKazdegoDnia() );
 
+			int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1] + poczatkowaLiczbaChorych;
+			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
+			System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
+			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
+		}
+		
+		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
+							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
+	}
+	
+	public static void powtorzEpidemieNRazyZPrintowaniem(int n){
+		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
+		
+		for(int i=0; i<n; i++){
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			
+			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			int sumaStopniWierzcholkow = 0;
+			int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
+			for(int j=0; j<tablicaStopniWierzcholkow.length; j++)
+				sumaStopniWierzcholkow += tablicaStopniWierzcholkow[j];
+			System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
+			//for(int i=0; i<100; i++)
+			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
+			
+			
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			
+			epidemia.start(liczbaDni);
+			System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+			System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			
+			//Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
+			//Plotter.plot(
+			//		epidemia.getLiczbyZdrowychKazdegoDnia(), 
+			//		epidemia.getLiczbyChorychKazdegoDnia(), 
+			//		epidemia.getLiczbyOdpornychKazdegoDnia(),
+			//		epidemia.getZachorowalnoscKazdegoDnia() );
+
+			int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1] + poczatkowaLiczbaChorych;
+			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
+			System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
+			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
+		}
+		
+		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
+							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
+	}
+	
+	public static void powtorzEpidemieNRazy(int n){
+		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
+		
+		for(int i=0; i<n; i++){
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			
+			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			int sumaStopniWierzcholkow = 0;
+			int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
+			for(int j=0; j<tablicaStopniWierzcholkow.length; j++)
+				sumaStopniWierzcholkow += tablicaStopniWierzcholkow[j];
+			//System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
+			//for(int i=0; i<100; i++)
+			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
+			
+			
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			
+			epidemia.start(liczbaDni);
+			//System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			
+			//Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
+			//Plotter.plot(
+			//		epidemia.getLiczbyZdrowychKazdegoDnia(), 
+			//		epidemia.getLiczbyChorychKazdegoDnia(), 
+			//		epidemia.getLiczbyOdpornychKazdegoDnia(),
+			//		epidemia.getZachorowalnoscKazdegoDnia() );
+
+			int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1] + poczatkowaLiczbaChorych;
+			//int liczbaOsobnikowKtorePrzeszlyChorobe2 = epidemia.getLiczbyOdpornychKazdegoDnia()[liczbaDni-1] + epidemia.getLiczbyChorychKazdegoDnia()[liczbaDni-1] - liczbaZaszczepionych;
+			//int sumaZachorowan = 0;
+			//for(int k=0; k<epidemia.getZachorowalnoscKazdegoDnia().length; k++)
+			//	sumaZachorowan += epidemia.getZachorowalnoscKazdegoDnia()[k];
+			//System.out.println(liczbaOsobnikowKtorePrzeszlyChorobe+"  ||  " + liczbaOsobnikowKtorePrzeszlyChorobe2 +
+			//		"  ||  "+sumaZachorowan);
+			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
+			//System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
+			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
+		}
+		
+		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
+							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
 	}
 
 }

@@ -3,7 +3,20 @@ import java.util.Random;
 
 public abstract class ModelSzczepienia {
 	
-	public static void zaszczepLosowo(Graf populacja, int liczbaOsobnikow){
+	public static void zaszczep(StrategiaSzczepienia strategiaSzczepienia, Graf populacja, int liczbaOsobnikow){
+		switch(strategiaSzczepienia){
+			case LOSOWE:
+				zaszczepLosowo(populacja, liczbaOsobnikow);
+				break;
+			case OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM:
+				zaszczepOsobnikiZMaxStopniem(populacja, liczbaOsobnikow);
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private static void zaszczepLosowo(Graf populacja, int liczbaOsobnikow){
 		Random rand = new Random();
 		int liczbaZaszczepionych = 0;
 		while(liczbaZaszczepionych < liczbaOsobnikow){
@@ -15,7 +28,7 @@ public abstract class ModelSzczepienia {
 		}	
 	}
 	
-	public static void zaszczepOsobnikiZMaxStopniem(Graf populacja, int liczbaOsobnikow){
+	private static void zaszczepOsobnikiZMaxStopniem(Graf populacja, int liczbaOsobnikow){
 		int liczbaZaszczepionych = 0;
 		int[] stopnieWierzcholkow = populacja.getTablicaStopniWierzcholkow();
 		while(liczbaZaszczepionych < liczbaOsobnikow){
