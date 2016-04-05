@@ -3,6 +3,8 @@ package plot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 
+import javax.swing.JFrame;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,11 +17,12 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
-public class Plotter extends ApplicationFrame{
+public class Plotter extends JFrame { //ApplicationFrame{
 	
 	public Plotter( String applicationTitle, String chartTitle, int[] podatni, int[] chorzy, int[] odporni )
 	{
 	      super(applicationTitle);
+	      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	      JFreeChart xylineChart = ChartFactory.createXYLineChart(
 	         chartTitle ,
 	         "Dzień" ,
@@ -45,6 +48,7 @@ public class Plotter extends ApplicationFrame{
 	public Plotter( String applicationTitle, String chartTitle, int[] podatni, int[] chorzy, int[] odporni, int[] noweZachorowaniaKazdegoDnia )
 	{
 	      super(applicationTitle);
+	      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	      JFreeChart xylineChart = ChartFactory.createXYLineChart(
 	         chartTitle ,
 	         "Dzień" ,

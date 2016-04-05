@@ -4,66 +4,97 @@ import plot.*;
 
 public class PanelSterowania {
 	private static Graf graf;
+	private static TypSieci typSieci;
+	private static double ppbPrzepieciaSmallWorld;
 	private static int liczbaOsobnikow;
 	private static int liczbaKrawedzi;
 	private static int poczatkowaLiczbaChorych;
-	private static TypSieci typSieci;
 	private static int liczbaZaszczepionych;
 	private static StrategiaSzczepienia strategiaSzczepienia;
 	private static double prawdopodobienstwoZarazenia;
 	private static int czasTrwaniaChorobyWDniach;
 	private static int liczbaDni;
 	
-	public static void main(String[] args) {
-		
-		/* w klasie GrafListowy zmiana w metodzie getstopnieWierzcholka
-		 * kiedy dodalem 1 to wykres chorych sie znacznie splaszczyl - podoba mi sie 
-		 * przypomina chyba bardziej rzeczywiste
-		 */
-		liczbaOsobnikow = 10000;
-		liczbaKrawedzi = 50000; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
-		poczatkowaLiczbaChorych = 10;
-		
-		//typSieci = TypSieci.RANDOM;
-		//typSieci = TypSieci.SCALE_FREE;
-		typSieci = TypSieci.SMALL_WORLD; // kiedy wybieram smallworld to musze dopisac
+	
+	public static void uruchomZParametrami( TypSieci _typSieci,
+											int _liczbaOsobnikow, 
+											int _liczbaKrawedzi, 
+											int _poczatkowaLiczbaChorych,
+											int _liczbaZaszczepionych,
+											StrategiaSzczepienia _strategiaSzczepienia,
+											double _prawdopodobienstwoZarazenia,
+											int _czasTrwaniaChorobyWDniach,
+											int _liczbaDni,
+											int _liczbaPowtorzenEpidemii,
+											boolean _wyswietlacWykresy,
+											boolean _wyswietlacSzczegoly ) {
+
+		typSieci = _typSieci; // kiedy wybieram smallworld to musze dopisac
 		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
-		
-		//listowy dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
-		liczbaZaszczepionych = 200;
-		strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
-		//strategiaSzczepienia = StrategiaSzczepienia.OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM;
-		//strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_LOSOWEGO_ZNAJOMEGO;
-		//strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM;
-		/* to ostatnie rozni sie znacznie od strategii zaszczeposobnikiznajwyzszymstopniem
-		 * bo tu nie wykorzystujemy wiedzy a priori o topologii sieci
-		 * tylko pozyskujemy ja tak jak to mozna zrobic w zyciu
-		 * dzwonimy po ludziach i pytamy o popularnych znajomych :D
-		 */
-		
-		prawdopodobienstwoZarazenia = 0.02;
-		czasTrwaniaChorobyWDniach = 7;
-		liczbaDni = 100;
-		
-		/*
-		for(double i=0.010; i<0.021; i+=0.001){
-			prawdopodobienstwoZarazenia = i;
-			System.out.println("Prawdopodobieństwo zarażenia = " + prawdopodobienstwoZarazenia);
-			powtorzEpidemieNRazy( 100 );
-			System.out.println("\n\n");
+		liczbaOsobnikow = _liczbaOsobnikow;
+		liczbaKrawedzi = _liczbaKrawedzi; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
+		poczatkowaLiczbaChorych = _poczatkowaLiczbaChorych;
+		//implementacja listowa dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
+		liczbaZaszczepionych = _liczbaZaszczepionych;
+		strategiaSzczepienia = _strategiaSzczepienia;
+		prawdopodobienstwoZarazenia = _prawdopodobienstwoZarazenia;
+		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
+		liczbaDni = _liczbaDni;
+		if(_wyswietlacWykresy){
+			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
+		} else {
+			if(_wyswietlacSzczegoly){
+				powtorzEpidemieNRazyZPrintowaniem(_liczbaPowtorzenEpidemii);
+			} else {
+				powtorzEpidemieNRazy(_liczbaPowtorzenEpidemii);
+			}
 		}
-		*/
-		
-		powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(1);
-		
+	}
+	
+	public static void uruchomZParametrami( TypSieci _typSieci,
+											double _ppbPrzepieciaSmallWorld,
+											int _liczbaOsobnikow, 
+											int _liczbaKrawedzi, 
+											int _poczatkowaLiczbaChorych,
+											int _liczbaZaszczepionych,
+											StrategiaSzczepienia _strategiaSzczepienia,
+											double _prawdopodobienstwoZarazenia,
+											int _czasTrwaniaChorobyWDniach,
+											int _liczbaDni,
+											int _liczbaPowtorzenEpidemii,
+											boolean _wyswietlacWykresy,
+											boolean _wyswietlacSzczegoly ) {
+		typSieci = _typSieci; // kiedy wybieram smallworld to musze dopisac
+		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
+		ppbPrzepieciaSmallWorld = _ppbPrzepieciaSmallWorld;
+		liczbaOsobnikow = _liczbaOsobnikow;
+		liczbaKrawedzi = _liczbaKrawedzi; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
+		poczatkowaLiczbaChorych = _poczatkowaLiczbaChorych;
+		liczbaZaszczepionych = _liczbaZaszczepionych;
+		strategiaSzczepienia = _strategiaSzczepienia;
+		prawdopodobienstwoZarazenia = _prawdopodobienstwoZarazenia;
+		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
+		liczbaDni = _liczbaDni;
+
+		if(_wyswietlacWykresy){
+			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
+		} else {
+			if(_wyswietlacSzczegoly){
+				powtorzEpidemieNRazyZPrintowaniem(_liczbaPowtorzenEpidemii);
+			} else {
+				powtorzEpidemieNRazy(_liczbaPowtorzenEpidemii);
+			}
+		}
 	}
 	
 	public static void powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(int n){
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
-			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, 0.5);
-			
+			if(typSieci == TypSieci.SMALL_WORLD)
+				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
+			else
+				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
 			int sumaStopniWierzcholkow = 0;

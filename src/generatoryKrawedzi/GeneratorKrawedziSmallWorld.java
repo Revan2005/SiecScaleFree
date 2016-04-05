@@ -66,7 +66,7 @@ public class GeneratorKrawedziSmallWorld implements GeneratorKrawedzi{
 		while(liczbaKrokow < liczbaKrawedzi){
 			//System.out.println(rand.nextDouble()+"  "+prawdopodobienstwoPrzepiecia);
 			if(rand.nextDouble() < prawdopodobienstwoPrzepiecia){
-				System.out.println("Przepinam!!!");
+				//System.out.println("Przepinam!!!");
 				graf.usunKrawedz(index, (index+odlegloscOdNajblizszegoNierozwazanegoSasiada) % liczbaWierzcholkow);
 				nowyZnajomy = rand.nextInt(liczbaWierzcholkow);
 				graf.dodajKrawedz(index, nowyZnajomy);
