@@ -3,7 +3,10 @@ package glowny;
 
 import java.util.ArrayList;
 
+import generatoryKrawedzi.GeneratorKrawedziMixed;
+import generatoryKrawedzi.GeneratorKrawedziRandom;
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
+import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
 
 
 public class GrafMacierzowy extends Graf{
@@ -13,16 +16,29 @@ public class GrafMacierzowy extends Graf{
 		super(typSieci, liczbaWezlow, liczbaKrawedzi);
 	}
 
+	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
+	}
 	
 	protected void utworzKrawedzie(){
 		macierzPolaczen = new int[liczbaWezlow][liczbaWezlow];
 		zerujMacierzPolaczen();
 		switch( typSieci ){
 			case SCALE_FREE:
-				GeneratorKrawedziScaleFree generator = new GeneratorKrawedziScaleFree();
-				generator.generujKrawedzie(this, liczbaKrawedzi);
+				GeneratorKrawedziScaleFree generatorScaleFree = new GeneratorKrawedziScaleFree();
+				generatorScaleFree.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			case SMALL_WORLD:
+				GeneratorKrawedziSmallWorld generatorSmallWorld = new GeneratorKrawedziSmallWorld(ppbPrzepieciaSmallWorld);
+				generatorSmallWorld.generujKrawedzie(this, liczbaKrawedzi);
+				break;
+			case RANDOM:
+				GeneratorKrawedziRandom generatorRandom = new GeneratorKrawedziRandom();
+				generatorRandom.generujKrawedzie(this, liczbaKrawedzi);
+				break;
+			case MIXED:
+				GeneratorKrawedziMixed generatorMixed = new GeneratorKrawedziMixed();
+				generatorMixed.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			default:
 				break;
@@ -82,7 +98,7 @@ public class GrafMacierzowy extends Graf{
 		macierzPolaczen[wezel2][wezel1] = 1;
 	}
 	
-	protected int usunKrawedz(int wezel1, int wezel2){
+	public int usunKrawedz(int wezel1, int wezel2){
 		if(macierzPolaczen[wezel1][wezel2] == 1){
 			macierzPolaczen[wezel1][wezel2] = 0;
 			macierzPolaczen[wezel2][wezel1] = 0;

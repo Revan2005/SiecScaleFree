@@ -9,6 +9,7 @@ public abstract class Graf {
 	protected int liczbaWezlow;
 	protected int liczbaKrawedzi;
 	protected ArrayList<Osobnik> listaOsobnikow;
+	protected double ppbPrzepieciaSmallWorld;
 	
 	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi){
 		this.typSieci = typSieci;
@@ -17,6 +18,15 @@ public abstract class Graf {
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();
 	}
+	
+	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
+		this.typSieci = typSieci;
+		this.liczbaWezlow = liczbaWezlow;
+		this.liczbaKrawedzi = liczbaKrawedzi;
+		this.ppbPrzepieciaSmallWorld = ppbPrzepieciaSmallWorld;
+		inicjalizujListeOsobnikow();
+		utworzKrawedzie();
+	} 
 	
 	protected abstract void utworzKrawedzie();
 	
@@ -82,7 +92,7 @@ public abstract class Graf {
 	
 	public abstract void dodajKrawedz(int wezel1, int wezel2);
 	
-	protected abstract int usunKrawedz(int wezel1, int wezel2);
+	public abstract int usunKrawedz(int wezel1, int wezel2);
 
 
 }

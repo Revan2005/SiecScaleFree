@@ -1,7 +1,10 @@
 package glowny;
 import java.util.ArrayList;
 
+import generatoryKrawedzi.GeneratorKrawedziMixed;
+import generatoryKrawedzi.GeneratorKrawedziRandom;
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
+import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
 
 
 public class GrafListowy extends Graf{
@@ -9,6 +12,10 @@ public class GrafListowy extends Graf{
 	
 	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi){
 		super(typSieci, liczbaWezlow, liczbaKrawedzi);
+	}
+	
+	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
 	}
 	
 	@Override
@@ -20,10 +27,20 @@ public class GrafListowy extends Graf{
 		}
 		switch( typSieci ){
 			case SCALE_FREE:
-				GeneratorKrawedziScaleFree generator = new GeneratorKrawedziScaleFree();
-				generator.generujKrawedzie(this, liczbaKrawedzi);
+				GeneratorKrawedziScaleFree generatorScaleFree = new GeneratorKrawedziScaleFree();
+				generatorScaleFree.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			case SMALL_WORLD:
+				GeneratorKrawedziSmallWorld generatorSmallWorld = new GeneratorKrawedziSmallWorld(ppbPrzepieciaSmallWorld);
+				generatorSmallWorld.generujKrawedzie(this, liczbaKrawedzi);
+				break;
+			case RANDOM:
+				GeneratorKrawedziRandom generatorRandom = new GeneratorKrawedziRandom();
+				generatorRandom.generujKrawedzie(this, liczbaKrawedzi);
+				break;
+			case MIXED:
+				GeneratorKrawedziMixed generatorMixed = new GeneratorKrawedziMixed();
+				generatorMixed.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			default:
 				break;
@@ -55,14 +72,16 @@ public class GrafListowy extends Graf{
 	}
 	
 	public void dodajKrawedz(int wezel1, int wezel2){
-		listaPolaczen.get(wezel1).add(wezel2);
-		listaPolaczen.get(wezel2).add(wezel1);
+		if(!czyPolaczone(wezel1, wezel2)){
+			listaPolaczen.get(wezel1).add(wezel2);
+			listaPolaczen.get(wezel2).add(wezel1);
+		}
 	}
 	
-	protected int usunKrawedz(int wezel1, int wezel2){
+	public int usunKrawedz(int wezel1, int wezel2){
 		if( listaPolaczen.get(wezel1).contains(wezel2) ){
-			listaPolaczen.get(wezel1).remove(wezel2);
-			listaPolaczen.get(wezel2).remove(wezel1);
+			listaPolaczen.get(wezel1).remove(new Integer(wezel2));
+			listaPolaczen.get(wezel2).remove(new Integer(wezel1));
 			return 0;
 		}
 		return -1;

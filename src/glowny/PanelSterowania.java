@@ -23,13 +23,18 @@ public class PanelSterowania {
 		liczbaOsobnikow = 10000;
 		liczbaKrawedzi = 50000; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
 		poczatkowaLiczbaChorych = 10;
-		typSieci = TypSieci.SCALE_FREE;
+		
+		//typSieci = TypSieci.RANDOM;
+		//typSieci = TypSieci.SCALE_FREE;
+		typSieci = TypSieci.SMALL_WORLD; // kiedy wybieram smallworld to musze dopisac
+		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
+		
 		//listowy dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
 		liczbaZaszczepionych = 200;
-		//strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
+		strategiaSzczepienia = StrategiaSzczepienia.LOSOWE;
 		//strategiaSzczepienia = StrategiaSzczepienia.OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM;
 		//strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_LOSOWEGO_ZNAJOMEGO;
-		strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM;
+		//strategiaSzczepienia = StrategiaSzczepienia.WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM;
 		/* to ostatnie rozni sie znacznie od strategii zaszczeposobnikiznajwyzszymstopniem
 		 * bo tu nie wykorzystujemy wiedzy a priori o topologii sieci
 		 * tylko pozyskujemy ja tak jak to mozna zrobic w zyciu
@@ -57,7 +62,7 @@ public class PanelSterowania {
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
-			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, 0.5);
 			
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
