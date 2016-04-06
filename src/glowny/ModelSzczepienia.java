@@ -69,11 +69,14 @@ public abstract class ModelSzczepienia {
 	}
 	
 	private static void zaszczepWskazanychZnajomychZNajwyzszymStopniem(Graf populacja, int liczbaOsobnikow){
+		//kiedy ten z najwyzszym stopniem jest juz zaszczepiony to szczepimy losowego!!!
+
 		Random rand = new Random();
 		int liczbaZaszczepionych = 0;
 		while(liczbaZaszczepionych < liczbaOsobnikow){
 			int indexOsobnikaDoKtoregoDzwonimy = rand.nextInt(populacja.getLiczbaWezlow());
 			List<Integer> listaZnajomych = populacja.getListaSasiadowOsobnika(indexOsobnikaDoKtoregoDzwonimy);
+			System.out.println(listaZnajomych.size() + " " + liczbaZaszczepionych);
 			if(listaZnajomych.size() < 1){
 				continue;
 			}
@@ -90,6 +93,16 @@ public abstract class ModelSzczepienia {
 			if(populacja.getStanZdrowiaOsobnika(indexWskazanegoOsobnika).equals(StanOsobnika.ZDROWY)){
 				populacja.setStanZdrowiaOsobnika(indexWskazanegoOsobnika, StanOsobnika.ODPORNY);
 				liczbaZaszczepionych++;
+			} else { //jak ten z najwyzszym stopniem jest juz zaszczepiony to szczepimy pierwszeggo z brzegu (to tak jak losowo a bedzie szybciej bo bez rand)
+				int indexWPopulacji;
+				for(int i=0; i<listaZnajomych.size(); i++){
+					indexWPopulacji = listaZnajomych.get(i);
+					if(populacja.getStanZdrowiaOsobnika(indexWPopulacji).equals(StanOsobnika.ZDROWY)){
+						populacja.setStanZdrowiaOsobnika(indexWPopulacji, StanOsobnika.ODPORNY);
+						liczbaZaszczepionych++;
+						break;
+					}
+				}
 			}
 		}
 	}
