@@ -2,7 +2,7 @@ package glowny;
 import java.util.ArrayList;
 import java.util.Random;
 
-import generatoryKrawedzi.GeneratorKrawedziScaleFree;
+
 
 
 public abstract class Graf {
@@ -10,7 +10,7 @@ public abstract class Graf {
 	protected int liczbaWezlow;
 	protected int liczbaKrawedzi;
 	protected ArrayList<Osobnik> listaOsobnikow;
-	protected double ppbPrzepieciaSmallWorld;
+	protected double ppbPrzepieciaSmallWorld_Hybrid;
 	ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
 	
 	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
@@ -22,11 +22,11 @@ public abstract class Graf {
 		utworzKrawedzie();
 	}
 	
-	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld_Hybrid, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		this.typSieci = typSieci;
 		this.liczbaWezlow = liczbaWezlow;
 		this.liczbaKrawedzi = liczbaKrawedzi;
-		this.ppbPrzepieciaSmallWorld = ppbPrzepieciaSmallWorld;
+		this.ppbPrzepieciaSmallWorld_Hybrid = ppbPrzepieciaSmallWorld_Hybrid;
 		this.parametryRozkladuPodatnosciNaInfekcje = parametryRozkladuPodatnosciNaInfekcje;
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();
@@ -50,7 +50,7 @@ public abstract class Graf {
 		double sigma = parametryRozkladuPodatnosciNaInfekcje.odchylenieStandardowe;
 		double mi = parametryRozkladuPodatnosciNaInfekcje.srednia;
 		double wspolczynnikPodatnosciNaInfekcje = (sigma * random.nextGaussian()) + mi;
-		System.out.println("wspolczynnikPodatnosci = " + wspolczynnikPodatnosciNaInfekcje + " srednia = "+mi+"  odchylenie = "+sigma + "  to jest printowane w klasie Grf");
+		//System.out.println("wspolczynnikPodatnosci = " + wspolczynnikPodatnosciNaInfekcje + " srednia = "+mi+"  odchylenie = "+sigma + "  to jest printowane w klasie Grf");
 		return new Osobnik(StanOsobnika.ZDROWY, wspolczynnikPodatnosciNaInfekcje);
 	}
 	

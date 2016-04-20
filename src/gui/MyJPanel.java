@@ -42,6 +42,7 @@ public class MyJPanel extends JPanel{
 		typSieciComboBox.addItem("Graf losowy");
 		typSieciComboBox.addItem("Siec small world");
 		typSieciComboBox.addItem("Siec scale free");
+		typSieciComboBox.addItem("Siec hybrydowa"); //hybrydowa = small world + scale free
 		typSieciComboBox.setSelectedIndex(1); //ustawiam domyslnie na small world
 		add(typSieciLabel);
 		add(typSieciComboBox);
@@ -83,7 +84,7 @@ public class MyJPanel extends JPanel{
 		add(strategiaSzczepieniaComboBox);
 		
 		JLabel zakaznoscPatogenuLabel = new JLabel("WspolczynnikZakaznosciPatogenu");
-		zakaznoscPatogenuTextField = new JTextField("   0.02  ");
+		zakaznoscPatogenuTextField = new JTextField("   0.05  ");
 		add(zakaznoscPatogenuLabel);
 		add(zakaznoscPatogenuTextField);
 		
@@ -146,6 +147,8 @@ public class MyJPanel extends JPanel{
 				return TypSieci.SMALL_WORLD;
 			case "Siec scale free":
 				return TypSieci.SCALE_FREE;
+			case "Siec hybrydowa":
+				return TypSieci.HYBRID;
 			default:
 				return TypSieci.RANDOM;
 		}	

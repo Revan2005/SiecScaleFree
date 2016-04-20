@@ -3,7 +3,7 @@ package glowny;
 
 import java.util.ArrayList;
 
-import generatoryKrawedzi.GeneratorKrawedziMixed;
+import generatoryKrawedzi.GeneratorKrawedziHybrid;
 import generatoryKrawedzi.GeneratorKrawedziRandom;
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
 import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
@@ -16,8 +16,8 @@ public class GrafMacierzowy extends Graf{
 		super(typSieci, liczbaWezlow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 	}
 
-	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
+	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld_Hybrid, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld_Hybrid, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
 	protected void utworzKrawedzie(){
@@ -29,16 +29,16 @@ public class GrafMacierzowy extends Graf{
 				generatorScaleFree.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			case SMALL_WORLD:
-				GeneratorKrawedziSmallWorld generatorSmallWorld = new GeneratorKrawedziSmallWorld(ppbPrzepieciaSmallWorld);
+				GeneratorKrawedziSmallWorld generatorSmallWorld = new GeneratorKrawedziSmallWorld(ppbPrzepieciaSmallWorld_Hybrid);
 				generatorSmallWorld.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			case RANDOM:
 				GeneratorKrawedziRandom generatorRandom = new GeneratorKrawedziRandom();
 				generatorRandom.generujKrawedzie(this, liczbaKrawedzi);
 				break;
-			case MIXED:
-				GeneratorKrawedziMixed generatorMixed = new GeneratorKrawedziMixed();
-				generatorMixed.generujKrawedzie(this, liczbaKrawedzi);
+			case HYBRID:
+				GeneratorKrawedziHybrid generatorHybrid = new GeneratorKrawedziHybrid(ppbPrzepieciaSmallWorld_Hybrid);
+				generatorHybrid.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			default:
 				break;

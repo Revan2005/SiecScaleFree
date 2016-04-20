@@ -96,7 +96,7 @@ public class PanelSterowania {
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
-			if(typSieci == TypSieci.SMALL_WORLD)
+			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 			else
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
