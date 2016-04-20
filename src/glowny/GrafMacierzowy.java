@@ -12,12 +12,12 @@ import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
 public class GrafMacierzowy extends Graf{
 	private int[][] macierzPolaczen;
 	
-	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi);
+	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 	}
 
-	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
+	public GrafMacierzowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
 	protected void utworzKrawedzie(){

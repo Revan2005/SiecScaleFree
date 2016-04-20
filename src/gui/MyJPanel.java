@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import glowny.ParametryRozkladu;
 import glowny.StrategiaSzczepienia;
 import glowny.TypSieci;
 
@@ -28,7 +29,9 @@ public class MyJPanel extends JPanel{
 	private JTextField liczbaPowtorzenEpidemiiTextField;
 	private JTextField liczbaDniTextField;
 	private JTextField czasTrwaniaChorobyTextField;
-	private JTextField ppbZarazeniaTextField;
+	private JTextField zakaznoscPatogenuTextField;
+	private JTextField sredniaPodatnoscNaInfekcjeTextField;
+	private JTextField odchylenieStandardowePodatnosciNaInfekcjeTextField;
 	
 	public MyJPanel(){
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -79,10 +82,20 @@ public class MyJPanel extends JPanel{
 		add(strategiaSzczepieniaLabel);
 		add(strategiaSzczepieniaComboBox);
 		
-		JLabel ppbZarazeniaLabel = new JLabel("PrawdopodobienstwoZarazenia");
-		ppbZarazeniaTextField = new JTextField("   0.02  ");
-		add(ppbZarazeniaLabel);
-		add(ppbZarazeniaTextField);
+		JLabel zakaznoscPatogenuLabel = new JLabel("WspolczynnikZakaznosciPatogenu");
+		zakaznoscPatogenuTextField = new JTextField("   0.02  ");
+		add(zakaznoscPatogenuLabel);
+		add(zakaznoscPatogenuTextField);
+		
+		JLabel sredniaPodatnoscNaInfekcjeLabel = new JLabel("srednia podatnosc na infekcje (rozklad normalny wartosci zmiennych z tego rozkladu przycinam do przedizalu[0,1])");
+		sredniaPodatnoscNaInfekcjeTextField = new JTextField("   0.5  ");
+		add(sredniaPodatnoscNaInfekcjeLabel);
+		add(sredniaPodatnoscNaInfekcjeTextField);
+
+		JLabel odchylenieStandardowePodatnosciNaInfekcjeLabel = new JLabel("odch standardowe podatnosci na infekcje (2 param rozkladu normalnego, zmienne z rozkladu przycinam do przedzialu [0,1])");
+		odchylenieStandardowePodatnosciNaInfekcjeTextField = new JTextField("   0.1  ");
+		add(odchylenieStandardowePodatnosciNaInfekcjeLabel);
+		add(odchylenieStandardowePodatnosciNaInfekcjeTextField);
 		
 		JLabel czasTrwaniaChorobyLabel = new JLabel("CzasTrwaniaChorobyWDniach");
 		czasTrwaniaChorobyTextField = new JTextField("  7   ");
@@ -189,11 +202,21 @@ public class MyJPanel extends JPanel{
 		}
 	}
 	
-	public double getPrawdopodobienstwoZarazenia(){
-		String ppb = ppbZarazeniaTextField.getText();
-		ppb = ppb.trim();
-		double ppbDouble = Double.parseDouble(ppb);
-		return ppbDouble;
+	public double getZakaznoscPatogenu(){
+		String zakaznoscPatogenu = zakaznoscPatogenuTextField.getText();
+		zakaznoscPatogenu = zakaznoscPatogenu.trim();
+		double zakaznoscPatogenuDouble = Double.parseDouble(zakaznoscPatogenu);
+		return zakaznoscPatogenuDouble;
+	}
+	
+	public ParametryRozkladu getParametryRozkladuPodatnosciNaInfekcje(){
+		String sredniaString = sredniaPodatnoscNaInfekcjeTextField.getText();
+		sredniaString = sredniaString.trim();
+		double sredniaDouble = Double.parseDouble(sredniaString);
+		String odchylenieString = odchylenieStandardowePodatnosciNaInfekcjeTextField.getText();
+		odchylenieString = odchylenieString.trim();
+		double odchylenieDouble = Double.parseDouble(odchylenieString);
+		return new ParametryRozkladu(sredniaDouble, odchylenieDouble);
 	}
 	
 	public int getCzasTrwaniaChorobyWDniach(){

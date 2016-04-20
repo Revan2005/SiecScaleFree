@@ -1,6 +1,7 @@
 package gui;
 
 import glowny.PanelSterowania;
+import glowny.ParametryRozkladu;
 import glowny.StrategiaSzczepienia;
 import glowny.TypSieci;
 
@@ -64,7 +65,8 @@ public class Controller {
 			int poczatkowaLiczbaChorych,
 			int liczbaZaszczepionych,
 			StrategiaSzczepienia strategiaSzczepienia,
-			double prawdopodobienstwoZarazenia,
+			double zakaznoscPatogenu,
+			ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje,
 			int czasTrwaniaChorobyWDniach,
 			int liczbaDni,
 			int liczbaPowtorzenEpidemii,
@@ -78,7 +80,8 @@ public class Controller {
 				poczatkowaLiczbaChorych,
 				liczbaZaszczepionych,
 				strategiaSzczepienia,
-				prawdopodobienstwoZarazenia,
+				zakaznoscPatogenu,
+				parametryRozkladuPodatnosciNaInfekcje,
 				czasTrwaniaChorobyWDniach,
 				liczbaDni,
 				liczbaPowtorzenEpidemii,

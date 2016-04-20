@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import glowny.ParametryRozkladu;
 import glowny.StrategiaSzczepienia;
 import glowny.TypSieci;
 
@@ -17,7 +18,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 	public MyJFrame(){
 		super("Hello World");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 500);
+		setSize(600, 600);
 		setLayout(new BorderLayout());
 		myJPanel = new MyJPanel();
 		add(myJPanel, BorderLayout.CENTER);
@@ -36,7 +37,8 @@ public class MyJFrame extends JFrame implements ActionListener {
 		int poczatkowaLiczbaChorych = myJPanel.getPoczatkowaLiczbaChorych();
 		int liczbaZaszczepionych = myJPanel.getLiczbaZaszczepionych();
 		StrategiaSzczepienia strategiaSzczepienia = myJPanel.getStrategiaSzczepienia();
-		double prawdopodobienstwoZarazenia = myJPanel.getPrawdopodobienstwoZarazenia();
+		double zakaznoscPatogenu = myJPanel.getZakaznoscPatogenu();
+		ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje = myJPanel.getParametryRozkladuPodatnosciNaInfekcje();
 		int czasTrwaniaChorobyWDniach = myJPanel.getCzasTrwaniaChorobyWDniach();
 		int liczbaDni = myJPanel.getLiczbaDni();
 		int liczbaPowtorzenEpidemii = myJPanel.getLiczbaPowtorzenEpidemii();
@@ -50,7 +52,8 @@ public class MyJFrame extends JFrame implements ActionListener {
 				poczatkowaLiczbaChorych,
 				liczbaZaszczepionych,
 				strategiaSzczepienia,
-				prawdopodobienstwoZarazenia,
+				zakaznoscPatogenu,
+				parametryRozkladuPodatnosciNaInfekcje,
 				czasTrwaniaChorobyWDniach,
 				liczbaDni,
 				liczbaPowtorzenEpidemii,

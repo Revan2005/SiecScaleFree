@@ -10,12 +10,12 @@ import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
 public class GrafListowy extends Graf{
 	private ArrayList<ArrayList<Integer>> listaPolaczen;
 	
-	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi);
+	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
-	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
+	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
 	@Override

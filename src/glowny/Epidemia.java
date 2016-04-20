@@ -10,9 +10,9 @@ public class Epidemia {
 	int[] chorzy;
 	int[] odporni;
 	
-	public Epidemia(Graf populacja, int poczatkowaLiczbaChorych, double prawdopodobienstwoZarazenia, int czasTrwaniaChorobyWDniach){
+	public Epidemia(Graf populacja, int poczatkowaLiczbaChorych, double zakaznoscPatogenu, int czasTrwaniaChorobyWDniach){
 		this.populacja = populacja;
-		this.zakaznoscPatogenu = prawdopodobienstwoZarazenia;
+		this.zakaznoscPatogenu = zakaznoscPatogenu;
 		this.czasTrwaniaChorobyWDniach = czasTrwaniaChorobyWDniach;
 		ustalPoczatkowaGrupeChorych(poczatkowaLiczbaChorych);
 	}

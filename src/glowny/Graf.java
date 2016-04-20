@@ -1,5 +1,6 @@
 package glowny;
 import java.util.ArrayList;
+import java.util.Random;
 
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
 
@@ -10,20 +11,23 @@ public abstract class Graf {
 	protected int liczbaKrawedzi;
 	protected ArrayList<Osobnik> listaOsobnikow;
 	protected double ppbPrzepieciaSmallWorld;
+	ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
 	
-	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi){
+	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		this.typSieci = typSieci;
 		this.liczbaWezlow = liczbaWezlow;
 		this.liczbaKrawedzi = liczbaKrawedzi;
+		this.parametryRozkladuPodatnosciNaInfekcje = parametryRozkladuPodatnosciNaInfekcje;
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();
 	}
 	
-	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld){
+	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		this.typSieci = typSieci;
 		this.liczbaWezlow = liczbaWezlow;
 		this.liczbaKrawedzi = liczbaKrawedzi;
 		this.ppbPrzepieciaSmallWorld = ppbPrzepieciaSmallWorld;
+		this.parametryRozkladuPodatnosciNaInfekcje = parametryRozkladuPodatnosciNaInfekcje;
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();
 	} 
@@ -34,9 +38,20 @@ public abstract class Graf {
 		//===========================================================
 		//tu tworze osobniki i tu moge ustalac ich odpornosc (pole podatnoscosobnikaNaInfekcje w klasie Osobnik)
 		listaOsobnikow = new ArrayList<Osobnik>();
+		Osobnik tworzonyOsobnik;
 		for(int i=0; i<liczbaWezlow; i++){
-			listaOsobnikow.add(new Osobnik(StanOsobnika.ZDROWY));
+			tworzonyOsobnik = stworzOsobnika();
+			listaOsobnikow.add(tworzonyOsobnik);
 		}
+	}
+	
+	protected Osobnik stworzOsobnika(){
+		Random random = new Random();
+		double sigma = parametryRozkladuPodatnosciNaInfekcje.odchylenieStandardowe;
+		double mi = parametryRozkladuPodatnosciNaInfekcje.srednia;
+		double wspolczynnikPodatnosciNaInfekcje = (sigma * random.nextGaussian()) + mi;
+		System.out.println("wspolczynnikPodatnosci = " + wspolczynnikPodatnosciNaInfekcje + " srednia = "+mi+"  odchylenie = "+sigma + "  to jest printowane w klasie Grf");
+		return new Osobnik(StanOsobnika.ZDROWY, wspolczynnikPodatnosciNaInfekcje);
 	}
 	
 	public abstract int[] getTablicaStopniWierzcholkow();

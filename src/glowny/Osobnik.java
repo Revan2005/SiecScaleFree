@@ -19,6 +19,7 @@ public class Osobnik {
 			this.wspolczynnikPodatnosciNaInfekcje = 0.0;
 		else
 			this.wspolczynnikPodatnosciNaInfekcje = wspolczynnikPodatnosciNaInfekcje;
+		//System.out.println("wspolczynnikPodatnosciPodany = "+wspolczynnikPodatnosciNaInfekcje+"  wspolczynnikPodatnosciPrzypisanyOsobnikowi = "+this.wspolczynnikPodatnosciNaInfekcje+"  to jest printowane w klasie osobnik");
 	}
 
 	public int getLiczbaDniOdZachorowania(){
@@ -39,5 +40,9 @@ public class Osobnik {
 	
 	public void setStan(StanOsobnika stanZdrowia){
 		this.stanZdrowia = stanZdrowia;
+	}
+	
+	public double getWspolczynnikPodatnosciNaInfekcje(){
+		return wspolczynnikPodatnosciNaInfekcje;
 	}
 }

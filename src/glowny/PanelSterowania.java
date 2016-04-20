@@ -11,7 +11,8 @@ public class PanelSterowania {
 	private static int poczatkowaLiczbaChorych;
 	private static int liczbaZaszczepionych;
 	private static StrategiaSzczepienia strategiaSzczepienia;
-	private static double prawdopodobienstwoZarazenia;
+	private static double zakaznoscPatogenu;
+	private static ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
 	private static int czasTrwaniaChorobyWDniach;
 	private static int liczbaDni;
 	
@@ -22,7 +23,8 @@ public class PanelSterowania {
 											int _poczatkowaLiczbaChorych,
 											int _liczbaZaszczepionych,
 											StrategiaSzczepienia _strategiaSzczepienia,
-											double _prawdopodobienstwoZarazenia,
+											double _zakaznoscPatogenu,
+											ParametryRozkladu _parametryRozkladuPodatnosciNaInfekcje,
 											int _czasTrwaniaChorobyWDniach,
 											int _liczbaDni,
 											int _liczbaPowtorzenEpidemii,
@@ -37,7 +39,8 @@ public class PanelSterowania {
 		//implementacja listowa dziala znacznie szybciej niz macierzowy nie ma sensu uzywac macierzowej implementacji
 		liczbaZaszczepionych = _liczbaZaszczepionych;
 		strategiaSzczepienia = _strategiaSzczepienia;
-		prawdopodobienstwoZarazenia = _prawdopodobienstwoZarazenia;
+		zakaznoscPatogenu = _zakaznoscPatogenu;
+		parametryRozkladuPodatnosciNaInfekcje = _parametryRozkladuPodatnosciNaInfekcje;
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
 		if(_wyswietlacWykresy){
@@ -58,7 +61,8 @@ public class PanelSterowania {
 											int _poczatkowaLiczbaChorych,
 											int _liczbaZaszczepionych,
 											StrategiaSzczepienia _strategiaSzczepienia,
-											double _prawdopodobienstwoZarazenia,
+											double _zakaznoscPatogenu,
+											ParametryRozkladu _parametryRozkladuPodatnosciNaInfekcje,
 											int _czasTrwaniaChorobyWDniach,
 											int _liczbaDni,
 											int _liczbaPowtorzenEpidemii,
@@ -72,7 +76,8 @@ public class PanelSterowania {
 		poczatkowaLiczbaChorych = _poczatkowaLiczbaChorych;
 		liczbaZaszczepionych = _liczbaZaszczepionych;
 		strategiaSzczepienia = _strategiaSzczepienia;
-		prawdopodobienstwoZarazenia = _prawdopodobienstwoZarazenia;
+		zakaznoscPatogenu = _zakaznoscPatogenu;
+		parametryRozkladuPodatnosciNaInfekcje = _parametryRozkladuPodatnosciNaInfekcje;
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
 
@@ -92,9 +97,9 @@ public class PanelSterowania {
 		
 		for(int i=0; i<n; i++){
 			if(typSieci == TypSieci.SMALL_WORLD)
-				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld);
+				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 			else
-				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
 			int sumaStopniWierzcholkow = 0;
@@ -106,7 +111,7 @@ public class PanelSterowania {
 			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
 			
 			
-			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
 			
 			epidemia.start(liczbaDni);
 			System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
@@ -135,7 +140,7 @@ public class PanelSterowania {
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
-			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 			
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
@@ -148,7 +153,7 @@ public class PanelSterowania {
 			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
 			
 			
-			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
 			
 			epidemia.start(liczbaDni);
 			System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
@@ -177,7 +182,7 @@ public class PanelSterowania {
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
-			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi);
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 			
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
@@ -190,7 +195,7 @@ public class PanelSterowania {
 			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
 			
 			
-			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, prawdopodobienstwoZarazenia, czasTrwaniaChorobyWDniach);
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
 			
 			epidemia.start(liczbaDni);
 			//System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
