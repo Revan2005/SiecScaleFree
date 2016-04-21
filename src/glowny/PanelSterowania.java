@@ -92,10 +92,14 @@ public class PanelSterowania {
 		}
 	}
 	
-	public static void powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(int n){
-		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
+	public static void powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(int liczbaSymulacji){
+		double[] frakcjeChorychWKolejnychSymulacjach = new double[liczbaSymulacji];
+		int[] sumaZNSymulacjiLiczbyChorychKazdegoDnia = new int[liczbaDni];
+		int[] sumaZNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaDni];
+		int[] sumaZNSymulacjiLiczbyOdpornychKazdegoDnia = new int[liczbaDni];
+		int[] sumaZNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaDni];
 		
-		for(int i=0; i<n; i++){
+		for(int i=0; i<liczbaSymulacji; i++){
 			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 			else
@@ -114,26 +118,75 @@ public class PanelSterowania {
 			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
 			
 			epidemia.start(liczbaDni);
-			System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
-			System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
-			System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
-			System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			sumaZNSymulacjiLiczbyChorychKazdegoDnia = dodajTabliceJakWektory(sumaZNSymulacjiLiczbyChorychKazdegoDnia, epidemia.getLiczbyChorychKazdegoDnia());
+			sumaZNSymulacjiLiczbyZdrowychKazdegoDnia = dodajTabliceJakWektory(sumaZNSymulacjiLiczbyZdrowychKazdegoDnia, epidemia.getLiczbyZdrowychKazdegoDnia());
+			sumaZNSymulacjiLiczbyOdpornychKazdegoDnia = dodajTabliceJakWektory(sumaZNSymulacjiLiczbyOdpornychKazdegoDnia, epidemia.getLiczbyOdpornychKazdegoDnia());
+			sumaZNSymulacjiZachorowalnoscKazdegoDnia = dodajTabliceJakWektory(sumaZNSymulacjiZachorowalnoscKazdegoDnia, epidemia.getZachorowalnoscKazdegoDnia());
 			
 			//Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
-			Plotter.plot(
+			/*Plotter.plot(
 					epidemia.getLiczbyZdrowychKazdegoDnia(), 
 					epidemia.getLiczbyChorychKazdegoDnia(), 
 					epidemia.getLiczbyOdpornychKazdegoDnia(),
 					epidemia.getZachorowalnoscKazdegoDnia() );
-
+			*/
 			int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1] + poczatkowaLiczbaChorych;
 			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
-			System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
+			//System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
 			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
 		}
+		double[] sredniaZNSymulacjiLiczbyChorychKazdegoDnia = podzielTablicePrzezSkalar(sumaZNSymulacjiLiczbyChorychKazdegoDnia, liczbaSymulacji);
+		double[] sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia = podzielTablicePrzezSkalar(sumaZNSymulacjiLiczbyZdrowychKazdegoDnia, liczbaSymulacji);
+		double[] sredniaZNSymulacjiLiczbyOdpornychKazdegoDnia = podzielTablicePrzezSkalar(sumaZNSymulacjiLiczbyOdpornychKazdegoDnia, liczbaSymulacji);
+		double[] sredniaZNSymulacjiZachorowalnoscKazdegoDnia = podzielTablicePrzezSkalar(sumaZNSymulacjiZachorowalnoscKazdegoDnia, liczbaSymulacji);
+		Plotter.plot(
+				sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia, 
+				sredniaZNSymulacjiLiczbyChorychKazdegoDnia, 
+				sredniaZNSymulacjiLiczbyOdpornychKazdegoDnia,
+				sredniaZNSymulacjiZachorowalnoscKazdegoDnia );
+
+		System.out.println( "I: " + Arrays.toString(sredniaZNSymulacjiLiczbyChorychKazdegoDnia) );
+		System.out.println( "S: " + Arrays.toString(sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia) );
+		System.out.println( "R: " + Arrays.toString(sredniaZNSymulacjiLiczbyOdpornychKazdegoDnia) );
+		System.out.println( "Z: " + Arrays.toString(sredniaZNSymulacjiZachorowalnoscKazdegoDnia) );
 		
 		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
 							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
+		double sredniaZFrakcjiChorychWKolejnychSymulacjach = obliczSredniaZTablicy(frakcjeChorychWKolejnychSymulacjach);
+		System.out.println("Srednia ze wszsytkich symulacji frakcja chorych = " + sredniaZFrakcjiChorychWKolejnychSymulacjach);
+	}
+	
+	private static int[] dodajTabliceJakWektory(int[] dotychczasowaSuma, int[] wynikKolejnejSymulacji){
+		//zakladam ze obie tablice sa tej samej dlugosci
+		//dodaje tak jak przy dodawaniu wektorow, odpowiadajace sobie skladowe dodaje do siebie
+		int[] result = new int[dotychczasowaSuma.length];
+		for(int i=0; i<dotychczasowaSuma.length; i++){
+			result[i] = dotychczasowaSuma[i] + wynikKolejnejSymulacji[i];
+		}
+		return result;
+	}
+	
+	private static double[] podzielTablicePrzezSkalar(int[] tablica, int skalar){
+		//dzieli jednowymiarowa tablice przez skalar tak jak sie mnozy/dzieli 
+		//wektor przez skalar - tzn. dziele kazda skladowa wektora przez ten skalar
+		double[] wynik = new double[tablica.length];
+		for(int i=0; i<tablica.length; i++){
+			wynik[i] = (double)tablica[i] / skalar; 
+		}
+		return wynik;
+	}
+	
+	private static double obliczSredniaZTablicy(double[] t){
+		double sum = 0;
+		for(int i=0; i<t.length; i++){
+			sum += t[i];
+		}
+		double result = sum / t.length;
+		return result;
 	}
 	
 	public static void powtorzEpidemieNRazyZPrintowaniem(int n){

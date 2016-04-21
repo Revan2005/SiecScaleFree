@@ -93,7 +93,7 @@ public class MyJPanel extends JPanel{
 		add(sredniaPodatnoscNaInfekcjeLabel);
 		add(sredniaPodatnoscNaInfekcjeTextField);
 
-		JLabel odchylenieStandardowePodatnosciNaInfekcjeLabel = new JLabel("odch standardowe podatnosci na infekcje (2 param rozkladu normalnego, zmienne z rozkladu przycinam do przedzialu [0,1])");
+		JLabel odchylenieStandardowePodatnosciNaInfekcjeLabel = new JLabel("odchylenie standardowe podatnosci na infekcje (2 param rozkladu normalnego, zmienne z rozkladu przycinam do przedzialu [0,1])");
 		odchylenieStandardowePodatnosciNaInfekcjeTextField = new JTextField("   0.1  ");
 		add(odchylenieStandardowePodatnosciNaInfekcjeLabel);
 		add(odchylenieStandardowePodatnosciNaInfekcjeTextField);

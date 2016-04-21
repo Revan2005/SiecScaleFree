@@ -93,7 +93,7 @@ public abstract class ModelSzczepienia {
 			if(populacja.getStanZdrowiaOsobnika(indexWskazanegoOsobnika).equals(StanOsobnika.ZDROWY)){
 				populacja.setStanZdrowiaOsobnika(indexWskazanegoOsobnika, StanOsobnika.ODPORNY);
 				liczbaZaszczepionych++;
-			} else { //jak ten z najwyzszym stopniem jest juz zaszczepiony to szczepimy pierwszeggo z brzegu (to tak jak losowo a bedzie szybciej bo bez rand)
+			} else { //jak ten z najwyzszym stopniem jest juz zaszczepiony to szczepimy pierwszeggo z brzegu (to tak jak losowo (moze nie do konca tak jak losowo ale nie zalezy nam tutaj na wlasciwej losowosci wystarczy ze poda ktoregokolwiek) a bedzie szybciej bo bez rand)
 				int indexWPopulacji;
 				for(int i=0; i<listaZnajomych.size(); i++){
 					indexWPopulacji = listaZnajomych.get(i);

@@ -72,7 +72,35 @@ public class Plotter extends JFrame { //ApplicationFrame{
 	      plot.setRenderer( renderer ); 
 	      setContentPane( chartPanel ); 
 	}
-
+	
+	public Plotter( String applicationTitle, String chartTitle, double[] podatni, double[] chorzy, double[] odporni, double[] noweZachorowaniaKazdegoDnia )
+	{
+	      super(applicationTitle);
+	      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	      JFreeChart xylineChart = ChartFactory.createXYLineChart(
+	         chartTitle ,
+	         "Dzień" ,
+	         "Liczba osobników" ,
+	         createDataset(podatni, chorzy, odporni, noweZachorowaniaKazdegoDnia) ,
+	         PlotOrientation.VERTICAL ,
+	         true , true , false);
+	         
+	      ChartPanel chartPanel = new ChartPanel( xylineChart );
+	      chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
+	      final XYPlot plot = xylineChart.getXYPlot( );
+	      XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer( );
+	      renderer.setSeriesPaint( 0 , Color.YELLOW );
+	      renderer.setSeriesPaint( 1 , Color.RED );
+	      renderer.setSeriesPaint( 2 , Color.GREEN );
+	      renderer.setSeriesPaint( 3 , Color.BLUE );
+	      renderer.setSeriesStroke( 0 , new BasicStroke( 1.0f ) );
+	      renderer.setSeriesStroke( 1 , new BasicStroke( 1.0f ) );
+	      renderer.setSeriesStroke( 2 , new BasicStroke( 1.0f ) );
+	      renderer.setSeriesStroke( 3 , new BasicStroke( 1.0f ) );
+	      plot.setRenderer( renderer ); 
+	      setContentPane( chartPanel ); 
+	}
+	
 	
 	public static void plot(int[] podatni, int[] chorzy, int[] odporni){
 	      Plotter chart = new Plotter("Model SIR", "wykres w dniach", podatni, chorzy, odporni);
@@ -82,6 +110,13 @@ public class Plotter extends JFrame { //ApplicationFrame{
 	}
 	
 	public static void plot(int[] podatni, int[] chorzy, int[] odporni, int[] noweZachorowaniaKazdegoDnia){
+	      Plotter chart = new Plotter("Model SIR", "wykres w dniach", podatni, chorzy, odporni, noweZachorowaniaKazdegoDnia);
+	      chart.pack( );          
+	      RefineryUtilities.centerFrameOnScreen( chart );          
+	      chart.setVisible( true ); 
+	}
+	
+	public static void plot(double[] podatni, double[] chorzy, double[] odporni, double[] noweZachorowaniaKazdegoDnia){
 	      Plotter chart = new Plotter("Model SIR", "wykres w dniach", podatni, chorzy, odporni, noweZachorowaniaKazdegoDnia);
 	      chart.pack( );          
 	      RefineryUtilities.centerFrameOnScreen( chart );          
@@ -106,6 +141,25 @@ public class Plotter extends JFrame { //ApplicationFrame{
 	}
 	
 	private XYDataset createDataset( int[] podatni, int[] chorzy, int[] odporni, int[] noweZachorowaniaKazdegoDnia ){
+	      final XYSeries S = new XYSeries( "Podatni" );   
+	      final XYSeries I = new XYSeries( "Chorzy" ); 
+	      final XYSeries R = new XYSeries( "Odporni" );  
+	      final XYSeries zachorowania = new XYSeries( "Nowe zachorowania" );
+	      for(int i=0; i<podatni.length; i++){
+	    	  S.add( i, podatni[i] );
+	    	  I.add( i, chorzy[i] );
+	    	  R.add( i, odporni[i] );
+	    	  zachorowania.add( i, noweZachorowaniaKazdegoDnia[i] );
+	      }         
+	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
+	      dataset.addSeries( S );          
+	      dataset.addSeries( I );          
+	      dataset.addSeries( R );
+	      dataset.addSeries(zachorowania);
+	      return dataset;
+	}
+	
+	private XYDataset createDataset( double[] podatni, double[] chorzy, double[] odporni, double[] noweZachorowaniaKazdegoDnia ){
 	      final XYSeries S = new XYSeries( "Podatni" );   
 	      final XYSeries I = new XYSeries( "Chorzy" ); 
 	      final XYSeries R = new XYSeries( "Odporni" );  
