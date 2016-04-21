@@ -49,7 +49,13 @@ public abstract class Graf {
 		Random random = new Random();
 		double sigma = parametryRozkladuPodatnosciNaInfekcje.odchylenieStandardowe;
 		double mi = parametryRozkladuPodatnosciNaInfekcje.srednia;
-		double wspolczynnikPodatnosciNaInfekcje = (sigma * random.nextGaussian()) + mi;
+		//w 2 kolejnych liniach zabezpieczam przed wyjsciem poza zakres [0,1], 
+		//wczesniej przycinalem ale teraz losuje od nowa jesli wypadnie poza zakres
+		//bo przy przycinaniu masa prawdopodobienstwa z "ogonkow" przechodzila na breg (tzn kazde wylosowanie powyzej jedynki dawalo jedynke)
+		//i przez to jedynka byla bardziej prawdopodobna niz na przyklad 0.99
+		double wspolczynnikPodatnosciNaInfekcje = -1; 
+		while( (wspolczynnikPodatnosciNaInfekcje < 0) || (wspolczynnikPodatnosciNaInfekcje > 1) )
+				wspolczynnikPodatnosciNaInfekcje = (sigma * random.nextGaussian()) + mi;
 		//System.out.println("wspolczynnikPodatnosci = " + wspolczynnikPodatnosciNaInfekcje + " srednia = "+mi+"  odchylenie = "+sigma + "  to jest printowane w klasie Grf");
 		return new Osobnik(StanOsobnika.ZDROWY, wspolczynnikPodatnosciNaInfekcje);
 	}
