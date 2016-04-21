@@ -8,8 +8,9 @@ import glowny.Graf;
 public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 		// czesc do nicjalizacji odpowiada parametrowi m0 algorytmu Barabasi Alberta
 		//tam to jest jako liczba a nie procent i musi zachodzic m <= m0
-		private final double CZESC_DO_INICJALIZACJI = 0.1;
+		private final double CZESC_DO_INICJALIZACJI = 0.05;
 		int liczbaWezlow;
+		private int liczbaKrawedzi;
 		int liczbaWezlowWPodgrafie;
 		int liczbaPozostalychWezlow;
 		private Graf graf;
@@ -21,6 +22,7 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 		public void generujKrawedzie(Graf graf, int liczbaKrawedzi){
 			this.graf = graf;
 			liczbaWezlow = graf.getLiczbaWezlow();
+			this.liczbaKrawedzi = liczbaKrawedzi;
 			//na podstawie oczekiwanej liczby krawedzi wyliczam wartosc m 
 			// to jest liczba krawedzi przypadajaca na 1 wierzcholek srednio
 			//suma stopni wierzcholkow = l.wierzcholkow*2
@@ -31,12 +33,16 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			 * wyliczam go na podstawie oczekiwanej liczby krawedzi
 			 * ale pojawiaja sie bledy zaokraglen
 			 * ale to juz kwestia zgodnosci z oryginalnym algorytmem
+			 * poprawiam to robiac sufit i pozniej usuwajac losowo nadmiarowe krawedzie
 			 * 
 			 */
 			
 			liczbaWezlowWPodgrafie = (int)(liczbaWezlow * CZESC_DO_INICJALIZACJI);
-			m = (int) Math.round( (double)liczbaKrawedzi / (liczbaWezlow - liczbaWezlowWPodgrafie) );	
-			
+			// zrobie sufit z m zeby krawedzi byl zawsze nadmiar po czym bede mogl usunac losowo nadmiarowe krawedzie
+			//dodawanie brakujacych wydaje mi sie zbyt ryzykowne, mogloby popsuc wlasnosc scale free sieci
+			m = (int)Math.ceil( (double)liczbaKrawedzi / (liczbaWezlow - liczbaWezlowWPodgrafie) );
+			//m = (int)Math.round( (double)liczbaKrawedzi / (liczbaWezlow - liczbaWezlowWPodgrafie) );
+			//System.out.println("MMMMMMMMMMMMMMMMMMMM========"+m+"  liczbaWezlow - liczbaWezlowWPodgrafie = "+(liczbaWezlow - liczbaWezlowWPodgrafie));
 			
 			for(int aktualnieDodawany = liczbaWezlowWPodgrafie; aktualnieDodawany < liczbaWezlow; aktualnieDodawany++){
 				int krawedzieDodaneDoNowegoWierzcholka = 0;
@@ -49,6 +55,27 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 				}
 			}
 
+			usunNadmiaroweKrawedzie();
+		}
+		
+		private void usunNadmiaroweKrawedzie(){
+			//usuwam losowo krawedzie az bedzie ich tyle ile podal uzytkownik
+			//bez tego etapu
+			//przy 10 tys wierzcholkow i 50 ty krawedzi krawedzi w rzeczywistosci bylo 
+			// az o 4 tysiace za duzo 
+			//liczbaKrawedzi to tutaj oczywiscie ZADANA liczba krawedzi (żądana, podana przez uzytkownika)
+			int ileKrawedziNalezyUsunac = graf.getRzeczywistaLiczbaKrawedzi() - liczbaKrawedzi;
+			Random random = new Random();
+			int w1, w2;
+			int licznik = 0;
+			while(licznik < ileKrawedziNalezyUsunac){
+				w1 = random.nextInt(graf.getLiczbaWezlow());
+				w2 = random.nextInt(graf.getLiczbaWezlow());
+				if(graf.czyPolaczone(w1, w2)){
+					graf.usunKrawedz(w1, w2);
+					licznik++;
+				}
+			}
 		}
 		
 		private int losujGdzieSiePrzylaczyc(int aktualnieDodawany){
@@ -85,6 +112,6 @@ public class GeneratorKrawedziScaleFree implements GeneratorKrawedzi{
 			}
 			return suma;
 		}
-
-
+		
+		
 }

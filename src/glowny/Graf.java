@@ -62,6 +62,16 @@ public abstract class Graf {
 	
 	public abstract int[] getTablicaStopniWierzcholkow();
 	
+	public int getRzeczywistaLiczbaKrawedzi(){
+		int[] tablicaStopniWierzcholkow = getTablicaStopniWierzcholkow();
+		int sumaStopniWierzcholkow = 0;
+		for(int i = 0; i < tablicaStopniWierzcholkow.length; i++){
+			sumaStopniWierzcholkow += tablicaStopniWierzcholkow[i];
+		}
+		int rzeczywistaLiczbaKrawedzi = sumaStopniWierzcholkow / 2;
+		return rzeczywistaLiczbaKrawedzi;
+	}
+	
 	public int getLiczbaChorych(){
 		int liczbaChorych = 0;
 		for(int i=0; i<liczbaWezlow; i++){
