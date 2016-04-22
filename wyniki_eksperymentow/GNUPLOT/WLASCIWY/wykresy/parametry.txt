@@ -1,0 +1,17 @@
+Parametry:
+Liczba symulacji: 100
+Typ sieci: SMALL_WORLD
+Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: 0.3
+Liczba wierzchołków w grafie: 10000
+Żądana iczba krawędzi grafu: 50000
+Rzeczywista liczba krawędzi grafu (różnice wynikają z własności zastosowanych algorytmów): 49987 (błąd: 0.026%)
+Średni stopień wierzchołka w grafie: 9.9974
+Początkowa liczba chorych: 10
+Strategia szczepienia: LOSOWE
+Liczba zaszczepionych: 200
+Współczynnik zakaźności patogenu: 0.05
+Współczynnik podatności na infekcje: 
+	- średnia: 0.5
+	- odchylenie standardowe: 0.1
+Czas trwania choroby: 7 dni
+Czas trwania symulacji: 100 dni

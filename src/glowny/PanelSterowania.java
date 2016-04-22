@@ -18,6 +18,7 @@ public class PanelSterowania {
 	private static ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
 	private static int czasTrwaniaChorobyWDniach;
 	private static int liczbaDni;
+	private static int liczbaPowtorzenEpidemii;
 	
 	
 	public static void uruchomZParametrami( TypSieci _typSieci,
@@ -46,6 +47,7 @@ public class PanelSterowania {
 		parametryRozkladuPodatnosciNaInfekcje = _parametryRozkladuPodatnosciNaInfekcje;
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
+		liczbaPowtorzenEpidemii = _liczbaPowtorzenEpidemii;
 		if(_wyswietlacWykresy){
 			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
 		} else {
@@ -83,6 +85,7 @@ public class PanelSterowania {
 		parametryRozkladuPodatnosciNaInfekcje = _parametryRozkladuPodatnosciNaInfekcje;
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
+		liczbaPowtorzenEpidemii = _liczbaPowtorzenEpidemii;
 
 		if(_wyswietlacWykresy){
 			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
@@ -282,12 +285,74 @@ public class PanelSterowania {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		zapiszDoPlikuParametrySymulacji(sciezka);
+		uruchomSkryptTworzacyWykresyWKatalogu(sciezka);
+	}
+	
+	private static void uruchomSkryptTworzacyWykresyWKatalogu(String sciezka){
+		try {
+			Runtime.getRuntime().exec(sciezka + "generujWykresy.sh");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private static void zapiszDoPlikuSrednieIOdchylenia(FileWriter writer, double[] tablicaSrednich, double[] tablicaOdchylen) throws IOException{
 		writer.write("dzien srednia odchylenie");
 		for(int i = 0; i < tablicaSrednich.length; i++){
 			writer.write("\n" + (i+1) + " " + tablicaSrednich[i] + " " + tablicaOdchylen[i]);
+		}
+	}
+	
+	private static void zapiszDoPlikuParametrySymulacji(String sciezka){
+		
+		/*	private static Graf graf;
+	private static TypSieci typSieci;
+	private static double ppbPrzepieciaSmallWorld;
+	private static int liczbaOsobnikow;
+	private static int liczbaKrawedzi;
+	private static int poczatkowaLiczbaChorych;
+	private static int liczbaZaszczepionych;
+	private static StrategiaSzczepienia strategiaSzczepienia;
+	private static double zakaznoscPatogenu;
+	private static ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
+	private static int czasTrwaniaChorobyWDniach;
+	private static int liczbaDni;
+	*/
+		
+		
+		File parametryOutputFile = new File(sciezka + "wykresy/parametry.txt");
+		try {
+			FileWriter parametryWriter = new FileWriter(parametryOutputFile);
+			parametryWriter.write("Parametry:\n");
+			parametryWriter.write("Liczba symulacji: " + liczbaPowtorzenEpidemii + "\n");
+			parametryWriter.write("Typ sieci: " + typSieci + "\n");
+			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
+				parametryWriter.write("Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: " + ppbPrzepieciaSmallWorld + "\n");
+			parametryWriter.write("Liczba wierzchołków w grafie: " + liczbaOsobnikow + "\n");
+			parametryWriter.write("Żądana iczba krawędzi grafu: " + liczbaKrawedzi + "\n");
+			parametryWriter.write("Średnia rzeczywista liczba krawędzi grafu (różnice wynikają z własności zastosowanych algorytmów): "
+				+ graf.getRzeczywistaLiczbaKrawedzi());
+			double blad = (double)Math.abs(liczbaKrawedzi - graf.getRzeczywistaLiczbaKrawedzi()) / liczbaKrawedzi;
+			blad *= 100;
+			parametryWriter.write(" (błąd: " + blad + "%)" + "\n");
+			double sredniStopienWierzcholkaWGrafie = ((double)graf.getRzeczywistaLiczbaKrawedzi() * 2) / liczbaOsobnikow; // sumaStopni wierzcholkow to 2* liczba krawedzi, zeby uzyskac srednia nalezy podzielic sume przez liczbe wierzcholkow
+			parametryWriter.write("Średni stopień wierzchołka w grafie: " + sredniStopienWierzcholkaWGrafie + "\n");
+			parametryWriter.write("Początkowa liczba chorych: " + poczatkowaLiczbaChorych + "\n");
+			parametryWriter.write("Strategia szczepienia: " + strategiaSzczepienia + "\n");
+			parametryWriter.write("Liczba zaszczepionych: " + liczbaZaszczepionych + "\n");
+			parametryWriter.write("Współczynnik zakaźności patogenu: " + zakaznoscPatogenu + "\n");
+			parametryWriter.write("Współczynnik podatności na infekcje: \n");
+			parametryWriter.write("	- średnia: " + parametryRozkladuPodatnosciNaInfekcje.srednia + "\n");
+			parametryWriter.write("	- odchylenie standardowe: " + parametryRozkladuPodatnosciNaInfekcje.odchylenieStandardowe + "\n");
+			parametryWriter.write("Czas trwania choroby: " + czasTrwaniaChorobyWDniach + " dni" + "\n");
+			parametryWriter.write("Czas trwania symulacji: " + liczbaDni + " dni" + "\n");
+			parametryWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
