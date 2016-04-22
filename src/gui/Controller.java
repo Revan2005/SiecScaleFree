@@ -70,8 +70,7 @@ public class Controller {
 			int czasTrwaniaChorobyWDniach,
 			int liczbaDni,
 			int liczbaPowtorzenEpidemii,
-			boolean wyswietlacWykresy,
-			boolean wyswietlacSzczegoly){
+			boolean wszystkieSymulacjeNaJednymGrafie){
 		PanelSterowania.uruchomZParametrami(
 				typSieci,
 				ppbPrzepieciaSmallWorld,
@@ -85,9 +84,7 @@ public class Controller {
 				czasTrwaniaChorobyWDniach,
 				liczbaDni,
 				liczbaPowtorzenEpidemii,
-				wyswietlacWykresy,
-				wyswietlacSzczegoly
-				);
+				wszystkieSymulacjeNaJednymGrafie);
 	}
 
 }

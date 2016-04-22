@@ -19,7 +19,7 @@ public class PanelSterowania {
 	private static int czasTrwaniaChorobyWDniach;
 	private static int liczbaDni;
 	private static int liczbaPowtorzenEpidemii;
-	
+	private static boolean wszystkieSymulacjeNaJednymGrafie;
 	
 	public static void uruchomZParametrami( TypSieci _typSieci,
 											int _liczbaOsobnikow, 
@@ -32,8 +32,7 @@ public class PanelSterowania {
 											int _czasTrwaniaChorobyWDniach,
 											int _liczbaDni,
 											int _liczbaPowtorzenEpidemii,
-											boolean _wyswietlacWykresy,
-											boolean _wyswietlacSzczegoly ) {
+											boolean _wszystkieSymulacjeNaJednymGrafie) {
 
 		typSieci = _typSieci; // kiedy wybieram smallworld to musze dopisac
 		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
@@ -48,14 +47,12 @@ public class PanelSterowania {
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
 		liczbaPowtorzenEpidemii = _liczbaPowtorzenEpidemii;
-		if(_wyswietlacWykresy){
-			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
+		wszystkieSymulacjeNaJednymGrafie = _wszystkieSymulacjeNaJednymGrafie;
+		
+		if(_wszystkieSymulacjeNaJednymGrafie){
+			powtorzEpidemieNRazyNaJednymGrafie(_liczbaPowtorzenEpidemii);
 		} else {
-			if(_wyswietlacSzczegoly){
-				powtorzEpidemieNRazyZPrintowaniem(_liczbaPowtorzenEpidemii);
-			} else {
-				powtorzEpidemieNRazy(_liczbaPowtorzenEpidemii);
-			}
+			powtorzEpidemieNRazyZaKazdymRazemTworzacNowyGraf(_liczbaPowtorzenEpidemii);
 		}
 	}
 	
@@ -71,8 +68,7 @@ public class PanelSterowania {
 											int _czasTrwaniaChorobyWDniach,
 											int _liczbaDni,
 											int _liczbaPowtorzenEpidemii,
-											boolean _wyswietlacWykresy,
-											boolean _wyswietlacSzczegoly ) {
+											boolean _wszystkieSymulacjeNaJednymGrafie) {
 		typSieci = _typSieci; // kiedy wybieram smallworld to musze dopisac
 		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
 		ppbPrzepieciaSmallWorld = _ppbPrzepieciaSmallWorld;
@@ -86,19 +82,93 @@ public class PanelSterowania {
 		czasTrwaniaChorobyWDniach = _czasTrwaniaChorobyWDniach;
 		liczbaDni = _liczbaDni;
 		liczbaPowtorzenEpidemii = _liczbaPowtorzenEpidemii;
-
-		if(_wyswietlacWykresy){
-			powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(_liczbaPowtorzenEpidemii);
+		wszystkieSymulacjeNaJednymGrafie = _wszystkieSymulacjeNaJednymGrafie;
+		
+		if(_wszystkieSymulacjeNaJednymGrafie){
+			powtorzEpidemieNRazyNaJednymGrafie(_liczbaPowtorzenEpidemii);
 		} else {
-			if(_wyswietlacSzczegoly){
-				powtorzEpidemieNRazyZPrintowaniem(_liczbaPowtorzenEpidemii);
-			} else {
-				powtorzEpidemieNRazy(_liczbaPowtorzenEpidemii);
-			}
+			powtorzEpidemieNRazyZaKazdymRazemTworzacNowyGraf(_liczbaPowtorzenEpidemii);
 		}
 	}
 	
-	public static void powtorzEpidemieNRazyZPrintowaniemIWyswietlaniemWykresow(int liczbaSymulacji){
+	public static void powtorzEpidemieNRazyNaJednymGrafie(int liczbaSymulacji){		
+		double[] frakcjeChorychWKolejnychSymulacjach = new double[liczbaSymulacji];
+		int[][] wynikiNSymulacjiLiczbyChorychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		int[][] wynikiNSymulacjiLiczbyOdpornychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		
+		//tworze graf, a w kolejnych iteracjach bede go resetowal, topologia bedize stala w obrebie eksperymentu (wszystkich symulacji)
+		if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
+		else
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
+		
+		for(int i=0; i<liczbaSymulacji; i++){
+			//tu miejsce na zresetowanie grafu
+			graf.reset(); //reset pozostawia topologie bez zmian ale ustawia wszsytkie osobniki na zdrowe/podatne
+
+			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			int sumaStopniWierzcholkow = 0;
+			int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
+			for(int j=0; j<tablicaStopniWierzcholkow.length; j++)
+				sumaStopniWierzcholkow += tablicaStopniWierzcholkow[j];
+			System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
+			//for(int j=0; j<10; j++)
+			//	System.out.println( graf.getListaSasiadowOsobnika(j) );
+			
+			//System.out.println("To wchodzi do epidemii: chorzy: "+graf.getLiczbaChorych()+", zdrowi: "+graf.getLiczbaZdrowych()+" odporni: "+graf.getLiczbaOdpornych());
+			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
+			
+			epidemia.start(liczbaDni);
+			//System.out.println( Arrays.toString(epidemia.getLiczbyChorychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyZdrowychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getLiczbyOdpornychKazdegoDnia()) );
+			//System.out.println( Arrays.toString(epidemia.getZachorowalnoscKazdegoDnia()) );
+			wynikiNSymulacjiLiczbyChorychKazdegoDnia[i] = epidemia.getLiczbyChorychKazdegoDnia();
+			//System.out.println(Arrays.toString(wynikiNSymulacjiLiczbyChorychKazdegoDnia[i]));
+			wynikiNSymulacjiLiczbyZdrowychKazdegoDnia[i] = epidemia.getLiczbyZdrowychKazdegoDnia();
+			wynikiNSymulacjiLiczbyOdpornychKazdegoDnia[i] = epidemia.getLiczbyOdpornychKazdegoDnia();
+			wynikiNSymulacjiZachorowalnoscKazdegoDnia[i] = epidemia.getZachorowalnoscKazdegoDnia();
+			
+			//Plotter.plot(epidemia.getLiczbyZdrowychKazdegoDnia(), epidemia.getLiczbyChorychKazdegoDnia(), epidemia.getLiczbyOdpornychKazdegoDnia());
+			/*Plotter.plot(
+					epidemia.getLiczbyZdrowychKazdegoDnia(), 
+					epidemia.getLiczbyChorychKazdegoDnia(), 
+					epidemia.getLiczbyOdpornychKazdegoDnia(),
+					epidemia.getZachorowalnoscKazdegoDnia() );
+			*/
+			int liczbaOsobnikowKtorePrzeszlyChorobe = epidemia.getLiczbyZdrowychKazdegoDnia()[0] - epidemia.getLiczbyZdrowychKazdegoDnia()[liczbaDni-1] + poczatkowaLiczbaChorych;
+			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
+			//System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
+			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
+		}
+
+		
+		wyswietlWykres(
+				frakcjeChorychWKolejnychSymulacjach, 
+				wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
+				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+
+		printujWyniki(
+				frakcjeChorychWKolejnychSymulacjach, 
+				wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
+				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+		
+		zapiszDoPliku(
+				frakcjeChorychWKolejnychSymulacjach, 
+				wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
+				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+	}
+	
+	public static void powtorzEpidemieNRazyZaKazdymRazemTworzacNowyGraf(int liczbaSymulacji){		
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[liczbaSymulacji];
 		int[][] wynikiNSymulacjiLiczbyChorychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
@@ -117,10 +187,10 @@ public class PanelSterowania {
 			for(int j=0; j<tablicaStopniWierzcholkow.length; j++)
 				sumaStopniWierzcholkow += tablicaStopniWierzcholkow[j];
 			System.out.println("sumaStopnie = "+sumaStopniWierzcholkow+"   liczbaWierzhcolkow ="+tablicaStopniWierzcholkow.length);
-			//for(int i=0; i<100; i++)
-			//	System.out.println( graf.getListaSasiadowOsobnika(i) );
+			//for(int j=0; j<10; j++)
+			//	System.out.println( graf.getListaSasiadowOsobnika(j) );
 			
-			
+			//System.out.println("To wchodzi do epidemii: chorzy: "+graf.getLiczbaChorych()+", zdrowi: "+graf.getLiczbaZdrowych()+" odporni: "+graf.getLiczbaOdpornych());
 			Epidemia epidemia = new Epidemia(graf, poczatkowaLiczbaChorych, zakaznoscPatogenu, czasTrwaniaChorobyWDniach);
 			
 			epidemia.start(liczbaDni);
@@ -306,28 +376,16 @@ public class PanelSterowania {
 		}
 	}
 	
-	private static void zapiszDoPlikuParametrySymulacji(String sciezka){
-		
-		/*	private static Graf graf;
-	private static TypSieci typSieci;
-	private static double ppbPrzepieciaSmallWorld;
-	private static int liczbaOsobnikow;
-	private static int liczbaKrawedzi;
-	private static int poczatkowaLiczbaChorych;
-	private static int liczbaZaszczepionych;
-	private static StrategiaSzczepienia strategiaSzczepienia;
-	private static double zakaznoscPatogenu;
-	private static ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
-	private static int czasTrwaniaChorobyWDniach;
-	private static int liczbaDni;
-	*/
-		
-		
+	private static void zapiszDoPlikuParametrySymulacji(String sciezka){		
 		File parametryOutputFile = new File(sciezka + "wykresy/parametry.txt");
 		try {
 			FileWriter parametryWriter = new FileWriter(parametryOutputFile);
 			parametryWriter.write("Parametry:\n");
 			parametryWriter.write("Liczba symulacji: " + liczbaPowtorzenEpidemii + "\n");
+			if(wszystkieSymulacjeNaJednymGrafie)
+				parametryWriter.write("Każda symulacje uruchomiona na takim samym grafie (topologia sieci stała w czasie eksperymentu)\n");
+			else
+				parametryWriter.write("Przed każdą symulacją losowany nowy graf (parametry sieci stałe, ale topologia sieci zmienna) \n");
 			parametryWriter.write("Typ sieci: " + typSieci + "\n");
 			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
 				parametryWriter.write("Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: " + ppbPrzepieciaSmallWorld + "\n");
@@ -400,6 +458,10 @@ public class PanelSterowania {
 	}
 	
 	public static void powtorzEpidemieNRazyZPrintowaniem(int n){
+		
+	}
+	/*
+	public static void powtorzEpidemieNRazyZPrintowaniem(int n){
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
 		for(int i=0; i<n; i++){
@@ -440,7 +502,13 @@ public class PanelSterowania {
 		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
 							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
 	}
+	*/
 	
+	public static void powtorzEpidemieNRazy(int n){
+		
+	}
+	
+	/*
 	public static void powtorzEpidemieNRazy(int n){
 		double[] frakcjeChorychWKolejnychSymulacjach = new double[n];
 		
@@ -488,5 +556,6 @@ public class PanelSterowania {
 		System.out.println( "frakcjeChorychWKolejnychSymulacjach: \n" + 
 							Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
 	}
+	*/
 
 }

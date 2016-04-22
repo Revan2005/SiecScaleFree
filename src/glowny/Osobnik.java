@@ -42,7 +42,13 @@ public class Osobnik {
 		this.stanZdrowia = stanZdrowia;
 	}
 	
+	public void reset(){
+		setStan(StanOsobnika.ZDROWY);
+		this.liczbaDniOdZachorowania = 0;
+	}
+	
 	public double getWspolczynnikPodatnosciNaInfekcje(){
 		return wspolczynnikPodatnosciNaInfekcje;
 	}
+
 }

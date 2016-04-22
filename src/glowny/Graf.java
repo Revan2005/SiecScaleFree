@@ -32,6 +32,13 @@ public abstract class Graf {
 		utworzKrawedzie();
 	} 
 	
+	public void reset(){
+		// wystarczy ustawic stan kazdego osobnika na ZDROWY, reszta pozostaje bez zmian, taka sama populacja tylko ze na nowo zdrowa i gotowa 
+		// do kolejnego eksperymentu
+		for(int i = 0; i < liczbaWezlow; i++)
+			getOsobnik(i).reset();
+	}
+	
 	protected abstract void utworzKrawedzie();
 	
 	protected void inicjalizujListeOsobnikow(){

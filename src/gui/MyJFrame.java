@@ -42,8 +42,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 		int czasTrwaniaChorobyWDniach = myJPanel.getCzasTrwaniaChorobyWDniach();
 		int liczbaDni = myJPanel.getLiczbaDni();
 		int liczbaPowtorzenEpidemii = myJPanel.getLiczbaPowtorzenEpidemii();
-		boolean wyswietlacWykresy = myJPanel.czyWyswietlacWykresy();
-		boolean wyswietlacSzczegoly = myJPanel.czyWyswietlacSzczegoly();
+		boolean wszystkieSymulacjeNaJednymGrafie = myJPanel.czyWszystkieSymulacjePrzeprowadzicNaJednymGrafie();
 		
 		Controller.start(typSieci,
 				ppbPrzepieciaSmallWorld,
@@ -57,8 +56,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 				czasTrwaniaChorobyWDniach,
 				liczbaDni,
 				liczbaPowtorzenEpidemii,
-				wyswietlacWykresy,
-				wyswietlacSzczegoly);
+				wszystkieSymulacjeNaJednymGrafie);
 		
 	}
 	

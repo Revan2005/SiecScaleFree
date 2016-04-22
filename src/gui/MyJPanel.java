@@ -24,8 +24,7 @@ public class MyJPanel extends JPanel{
 	private JTextField liczbaKrawedziTextField;
 	private JTextField poczatkowaLiczbaChorychTextField;
 	private JTextField liczbaZaszczepionychTextField;
-	private JCheckBox wyswietlacSzczegolyCheckBox;
-	private JCheckBox wyswietlacWykresyCheckBox;
+	private JCheckBox wszystkieSymulacjeNaJednymGrafieCheckBox;
 	private JTextField liczbaPowtorzenEpidemiiTextField;
 	private JTextField liczbaDniTextField;
 	private JTextField czasTrwaniaChorobyTextField;
@@ -113,13 +112,9 @@ public class MyJPanel extends JPanel{
 		add(liczbaPowtorzenEpidemiiLabel);
 		add(liczbaPowtorzenEpidemiiTextField);
 		
-		wyswietlacWykresyCheckBox = new JCheckBox("Wyświetlaj wykresy");
-		wyswietlacWykresyCheckBox.setSelected(true); //domyslnie zaznaczone
-		add(wyswietlacWykresyCheckBox);
-		
-		wyswietlacSzczegolyCheckBox = new JCheckBox("Wyświetlaj szczegóły");
-		wyswietlacSzczegolyCheckBox.setSelected(true); //domyslnie zaznaczone
-		add(wyswietlacSzczegolyCheckBox);
+		wszystkieSymulacjeNaJednymGrafieCheckBox = new JCheckBox("Czy wszystkie symulacje wykonać na tym samym grafie?");
+		wszystkieSymulacjeNaJednymGrafieCheckBox.setSelected(true); //domyslnie zaznaczone
+		add(wszystkieSymulacjeNaJednymGrafieCheckBox);
 		
 		/*
 		typSieci,
@@ -243,14 +238,8 @@ public class MyJPanel extends JPanel{
 		return lpInt;
 	}
 	
-	public boolean czyWyswietlacWykresy(){
-		if(wyswietlacWykresyCheckBox.isSelected())
-			return true;
-		return false;
-	}
-	
-	public boolean czyWyswietlacSzczegoly(){
-		if(wyswietlacSzczegolyCheckBox.isSelected())
+	public boolean czyWszystkieSymulacjePrzeprowadzicNaJednymGrafie(){
+		if(wszystkieSymulacjeNaJednymGrafieCheckBox.isSelected())
 			return true;
 		return false;
 	}
