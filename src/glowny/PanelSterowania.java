@@ -1,4 +1,7 @@
 package glowny;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import plot.*;
 
@@ -154,6 +157,13 @@ public class PanelSterowania {
 				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
 				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
 				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+		
+		zapiszDoPliku(
+				frakcjeChorychWKolejnychSymulacjach, 
+				wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
+				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
+				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
 	}
 	
 	private static void printujWyniki(
@@ -234,8 +244,51 @@ public class PanelSterowania {
 		return tablicaOdchylenStandardowych;
 	}
 	
-	private static void zapiszDoPliku(){
+	private static void zapiszDoPliku(
+			double[] frakcjeChorychWKolejnychSymulacjach,
+			int[][] wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
+			int[][] wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
+			int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
+			int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia){
+		double[] sredniaZNSymulacjiLiczbyChorychKazdegoDnia = obliczTabliceSrednich(wynikiNSymulacjiLiczbyChorychKazdegoDnia);
+		double[] sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia = obliczTabliceSrednich(wynikiNSymulacjiLiczbyZdrowychKazdegoDnia);
+		double[] sredniaZNSymulacjiLiczbyOdpornychKazdegoDnia = obliczTabliceSrednich(wynikiNSymulacjiLiczbyOdpornychKazdegoDnia);
+		double[] sredniaZNSymulacjiZachorowalnoscKazdegoDnia = obliczTabliceSrednich(wynikiNSymulacjiZachorowalnoscKazdegoDnia);
 		
+		double[] odchylenieStandardoweZNSymulacjiLiczbyChorychKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiLiczbyChorychKazdegoDnia);
+		double[] odchylenieStandardoweZNSymulacjiLiczbyZdrowychKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiLiczbyZdrowychKazdegoDnia);
+		double[] odchylenieStandardoweZNSymulacjiLiczbyOdpornychKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiLiczbyOdpornychKazdegoDnia);
+		double[] odchylenieStandardoweZNSymulacjiZachorowalnoscKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+		
+		String sciezka = "/home/tomek/workspace/MGR/ModelowanieEpidemii/wyniki_eksperymentow/GNUPLOT/WLASCIWY/";
+		File sOutputFile = new File(sciezka + "s.dat");
+		File iOutputFile = new File(sciezka + "i.dat");
+		File rOutputFile = new File(sciezka + "r.dat");
+		File zOutputFile = new File(sciezka + "z.dat");
+		try {
+			FileWriter sWriter = new FileWriter(sOutputFile);
+			FileWriter iWriter = new FileWriter(iOutputFile);
+			FileWriter rWriter = new FileWriter(rOutputFile);
+			FileWriter zWriter = new FileWriter(zOutputFile);
+			zapiszDoPlikuSrednieIOdchylenia(sWriter, sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia, odchylenieStandardoweZNSymulacjiLiczbyZdrowychKazdegoDnia);
+			zapiszDoPlikuSrednieIOdchylenia(iWriter, sredniaZNSymulacjiLiczbyChorychKazdegoDnia, odchylenieStandardoweZNSymulacjiLiczbyChorychKazdegoDnia);
+			zapiszDoPlikuSrednieIOdchylenia(rWriter, sredniaZNSymulacjiLiczbyOdpornychKazdegoDnia, odchylenieStandardoweZNSymulacjiLiczbyOdpornychKazdegoDnia);
+			zapiszDoPlikuSrednieIOdchylenia(zWriter, sredniaZNSymulacjiZachorowalnoscKazdegoDnia, odchylenieStandardoweZNSymulacjiZachorowalnoscKazdegoDnia);
+			sWriter.close();
+			iWriter.close();
+			rWriter.close();
+			zWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void zapiszDoPlikuSrednieIOdchylenia(FileWriter writer, double[] tablicaSrednich, double[] tablicaOdchylen) throws IOException{
+		writer.write("dzien srednia odchylenie");
+		for(int i = 0; i < tablicaSrednich.length; i++){
+			writer.write("\n" + (i+1) + " " + tablicaSrednich[i] + " " + tablicaOdchylen[i]);
+		}
 	}
 	
 	/*
