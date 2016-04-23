@@ -20,6 +20,7 @@ public class PanelSterowania {
 	private static int liczbaDni;
 	private static int liczbaPowtorzenEpidemii;
 	private static boolean wszystkieSymulacjeNaJednymGrafie;
+	private static double sredniaRzeczywistaLiczbaKrawedzi;
 	
 	public static void uruchomZParametrami( TypSieci _typSieci,
 											int _liczbaOsobnikow, 
@@ -103,6 +104,7 @@ public class PanelSterowania {
 			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
 		else
 			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
+		sredniaRzeczywistaLiczbaKrawedzi = graf.getRzeczywistaLiczbaKrawedzi();
 		
 		for(int i=0; i<liczbaSymulacji; i++){
 			//tu miejsce na zresetowanie grafu
@@ -174,6 +176,7 @@ public class PanelSterowania {
 		int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiLiczbyOdpornychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		sredniaRzeczywistaLiczbaKrawedzi = 0;
 		
 		for(int i=0; i<liczbaSymulacji; i++){
 			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
@@ -181,6 +184,8 @@ public class PanelSterowania {
 			else
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			sredniaRzeczywistaLiczbaKrawedzi += graf.getRzeczywistaLiczbaKrawedzi();
 			
 			int sumaStopniWierzcholkow = 0;
 			int[] tablicaStopniWierzcholkow = graf.getTablicaStopniWierzcholkow();
@@ -215,7 +220,7 @@ public class PanelSterowania {
 			//System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
 			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
 		}
-
+		sredniaRzeczywistaLiczbaKrawedzi /= liczbaSymulacji;
 		
 		wyswietlWykres(
 				frakcjeChorychWKolejnychSymulacjach, 
@@ -391,13 +396,23 @@ public class PanelSterowania {
 				parametryWriter.write("Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: " + ppbPrzepieciaSmallWorld + "\n");
 			parametryWriter.write("Liczba wierzchołków w grafie: " + liczbaOsobnikow + "\n");
 			parametryWriter.write("Żądana iczba krawędzi grafu: " + liczbaKrawedzi + "\n");
-			parametryWriter.write("Średnia rzeczywista liczba krawędzi grafu (różnice wynikają z własności zastosowanych algorytmów): "
-				+ graf.getRzeczywistaLiczbaKrawedzi());
-			double blad = (double)Math.abs(liczbaKrawedzi - graf.getRzeczywistaLiczbaKrawedzi()) / liczbaKrawedzi;
-			blad *= 100;
-			parametryWriter.write(" (błąd: " + blad + "%)" + "\n");
-			double sredniStopienWierzcholkaWGrafie = ((double)graf.getRzeczywistaLiczbaKrawedzi() * 2) / liczbaOsobnikow; // sumaStopni wierzcholkow to 2* liczba krawedzi, zeby uzyskac srednia nalezy podzielic sume przez liczbe wierzcholkow
-			parametryWriter.write("Średni stopień wierzchołka w grafie: " + sredniStopienWierzcholkaWGrafie + "\n");
+			if(wszystkieSymulacjeNaJednymGrafie){
+				parametryWriter.write("Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): "
+						+ graf.getRzeczywistaLiczbaKrawedzi());
+				double blad = (double)Math.abs(liczbaKrawedzi - graf.getRzeczywistaLiczbaKrawedzi()) / liczbaKrawedzi;
+				blad *= 100;
+				parametryWriter.write(" (błąd: " + blad + "%)" + "\n");
+				double sredniStopienWierzcholkaWGrafie = ((double)graf.getRzeczywistaLiczbaKrawedzi() * 2) / liczbaOsobnikow; // sumaStopni wierzcholkow to 2* liczba krawedzi, zeby uzyskac srednia nalezy podzielic sume przez liczbe wierzcholkow
+				parametryWriter.write("Średni stopień wierzchołka w grafie: " + sredniStopienWierzcholkaWGrafie + "\n");
+			} else {
+				parametryWriter.write("Średnia rzeczywista liczba krawędzi grafu (różnica wynika z własności zastosowanego algorytmu): "
+						+ sredniaRzeczywistaLiczbaKrawedzi);
+				double blad = (double)Math.abs(liczbaKrawedzi - sredniaRzeczywistaLiczbaKrawedzi) / liczbaKrawedzi;
+				blad *= 100;
+				parametryWriter.write(" (błąd: " + blad + "%)" + "\n");
+				double sredniStopienWierzcholkaWGrafie = ((double)sredniaRzeczywistaLiczbaKrawedzi * 2) / liczbaOsobnikow; // sumaStopni wierzcholkow to 2* liczba krawedzi, zeby uzyskac srednia nalezy podzielic sume przez liczbe wierzcholkow
+				parametryWriter.write("Średni stopień wierzchołka w grafie (uśredniony po wierzchołkach i symulacjach): " + sredniStopienWierzcholkaWGrafie + "\n");
+			}
 			parametryWriter.write("Początkowa liczba chorych: " + poczatkowaLiczbaChorych + "\n");
 			parametryWriter.write("Strategia szczepienia: " + strategiaSzczepienia + "\n");
 			parametryWriter.write("Liczba zaszczepionych: " + liczbaZaszczepionych + "\n");
