@@ -361,8 +361,31 @@ public class PanelSterowania {
 			e.printStackTrace();
 		}
 		
+		zapiszDoPlikuFrakcjeChorychWKolejnychSymulacjach(sciezka, frakcjeChorychWKolejnychSymulacjach);
 		zapiszDoPlikuParametrySymulacji(sciezka);
 		uruchomSkryptTworzacyWykresyWKatalogu(sciezka);
+	}
+	
+	private static void zapiszDoPlikuFrakcjeChorychWKolejnychSymulacjach(String sciezka, double[] frakcjeChorychWKolejnychSymulacjach){
+		File frakcjeChorychOutputFile = new File(sciezka + "wykresy/frakcjeChorychWKolejnychSymulacjach.txt");
+		try {
+			FileWriter frakcjeChorychWriter = new FileWriter(frakcjeChorychOutputFile);
+			frakcjeChorychWriter.write("FrakcjeChorychWKolejnychSymulacjach: \n" + 
+					Arrays.toString(frakcjeChorychWKolejnychSymulacjach) );
+			double sredniaZFrakcjiChorychWKolejnychSymulacjach = obliczSredniaZTablicy(frakcjeChorychWKolejnychSymulacjach);
+			double odchylenieStandardoweZFrakcjiChorychWKolejnychSymulacjach = obliczOdchylenieStandardoweZTablicy(frakcjeChorychWKolejnychSymulacjach);
+			frakcjeChorychWriter.write("\n\nŚrednia = " + sredniaZFrakcjiChorychWKolejnychSymulacjach + "\n");
+			frakcjeChorychWriter.write("Odchylenie stndardowe = " + odchylenieStandardoweZFrakcjiChorychWKolejnychSymulacjach + "\n\n");
+			
+			frakcjeChorychWriter.write(sredniaZFrakcjiChorychWKolejnychSymulacjach + "\n");
+			frakcjeChorychWriter.write(odchylenieStandardoweZFrakcjiChorychWKolejnychSymulacjach + "\n\n\n");
+			
+			frakcjeChorychWriter.write(sredniaZFrakcjiChorychWKolejnychSymulacjach + " " + odchylenieStandardoweZFrakcjiChorychWKolejnychSymulacjach + "\n");
+			frakcjeChorychWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private static void uruchomSkryptTworzacyWykresyWKatalogu(String sciezka){

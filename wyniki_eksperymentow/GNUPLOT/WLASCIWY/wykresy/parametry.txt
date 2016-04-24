@@ -1,12 +1,12 @@
 Parametry:
-Liczba symulacji: 10
-Przed każdą symulacją losowany nowy graf (parametry sieci stałe, ale topologia sieci zmienna) 
+Liczba symulacji: 14
+Każda symulacje uruchomiona na takim samym grafie (topologia sieci stała w czasie eksperymentu)
 Typ sieci: SMALL_WORLD
 Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: 0.3
 Liczba wierzchołków w grafie: 10000
 Żądana iczba krawędzi grafu: 50000
-Średnia rzeczywista liczba krawędzi grafu (różnica wynika z własności zastosowanego algorytmu): 49986.3 (błąd: 0.027399999999994176%)
-Średni stopień wierzchołka w grafie (uśredniony po wierzchołkach i symulacjach): 9.99726
+Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 49996 (błąd: 0.008%)
+Średni stopień wierzchołka w grafie: 9.9992
 Początkowa liczba chorych: 10
 Strategia szczepienia: LOSOWE
 Liczba zaszczepionych: 200
