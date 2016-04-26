@@ -76,7 +76,7 @@ public abstract class ModelSzczepienia {
 		while(liczbaZaszczepionych < liczbaOsobnikow){
 			int indexOsobnikaDoKtoregoDzwonimy = rand.nextInt(populacja.getLiczbaWezlow());
 			List<Integer> listaZnajomych = populacja.getListaSasiadowOsobnika(indexOsobnikaDoKtoregoDzwonimy);
-			System.out.println(listaZnajomych.size() + " " + liczbaZaszczepionych);
+			//System.out.println(listaZnajomych.size() + " " + liczbaZaszczepionych);
 			if(listaZnajomych.size() < 1){
 				continue;
 			}

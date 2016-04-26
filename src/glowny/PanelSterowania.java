@@ -219,6 +219,15 @@ public class PanelSterowania {
 			double frakcjaOsobnikowKtorePrzeszlyChorobe = ((double)liczbaOsobnikowKtorePrzeszlyChorobe/liczbaOsobnikow);
 			//System.out.println(frakcjaOsobnikowKtorePrzeszlyChorobe);
 			frakcjeChorychWKolejnychSymulacjach[i] = frakcjaOsobnikowKtorePrzeszlyChorobe;
+			
+			//================================================================================
+			//double frakcjaLiczonaInaczej = 0;
+			//for(int k=0; k<epidemia.getZachorowalnoscKazdegoDnia().length; k++){
+			//	frakcjaLiczonaInaczej += epidemia.getZachorowalnoscKazdegoDnia()[k];
+			//}
+			//frakcjaLiczonaInaczej /= epidemia.populacja.getLiczbaWezlow();
+			//System.out.println("Frakcja chorych w epidemii: "+i+" = "+frakcjaLiczonaInaczej);
+			//================================================================================
 		}
 		sredniaRzeczywistaLiczbaKrawedzi /= liczbaSymulacji;
 		

@@ -1,14 +1,14 @@
 Parametry:
-Liczba symulacji: 14
+Liczba symulacji: 1
 Każda symulacje uruchomiona na takim samym grafie (topologia sieci stała w czasie eksperymentu)
-Typ sieci: SMALL_WORLD
+Typ sieci: HYBRID
 Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: 0.3
 Liczba wierzchołków w grafie: 10000
 Żądana iczba krawędzi grafu: 50000
-Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 49996 (błąd: 0.008%)
-Średni stopień wierzchołka w grafie: 9.9992
+Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 49989 (błąd: 0.022000000000000002%)
+Średni stopień wierzchołka w grafie: 9.9978
 Początkowa liczba chorych: 10
-Strategia szczepienia: LOSOWE
+Strategia szczepienia: WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM
 Liczba zaszczepionych: 200
 Współczynnik zakaźności patogenu: 0.05
 Współczynnik podatności na infekcje: 

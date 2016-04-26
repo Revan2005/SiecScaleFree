@@ -36,79 +36,79 @@ public class MyJPanel extends JPanel{
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		//typ sieci
-		JLabel typSieciLabel = new JLabel("Wybierz typ sieci");
+		JLabel typSieciLabel = new JLabel("Typ sieci:");
 		typSieciComboBox = new JComboBox<String>();
 		typSieciComboBox.addItem("Graf losowy");
-		typSieciComboBox.addItem("Siec small world");
-		typSieciComboBox.addItem("Siec scale free");
-		typSieciComboBox.addItem("Siec hybrydowa"); //hybrydowa = small world + scale free
+		typSieciComboBox.addItem("Sieć small world");
+		typSieciComboBox.addItem("Sieć scale free");
+		typSieciComboBox.addItem("Sieć hybrydowa"); //hybrydowa = small world + scale free
 		typSieciComboBox.setSelectedIndex(1); //ustawiam domyslnie na small world
 		add(typSieciLabel);
 		add(typSieciComboBox);
 		
-		JLabel ppbPrzepieciaLabel = new JLabel("Ppb przepiecia (dotyczy tylko sieci Small World!)");
-		ppbPrzepieciaTextField = new JTextField("   0.3  ");
+		JLabel ppbPrzepieciaLabel = new JLabel("Prawdopodobieństwo przepięcia (dotyczy sieci small world i hybrydowej):");
+		ppbPrzepieciaTextField = new JTextField("0.3");
 		add(ppbPrzepieciaLabel);
 		add(ppbPrzepieciaTextField);
 		
-		JLabel liczbaOsobnikowLabel = new JLabel("Liczba osobników");
-		liczbaOsobnikowTextField = new JTextField("  10000   ");
+		JLabel liczbaOsobnikowLabel = new JLabel("Liczba osobników:");
+		liczbaOsobnikowTextField = new JTextField("10000");
 		add(liczbaOsobnikowLabel);
 		add(liczbaOsobnikowTextField);
 		
-		JLabel liczbaKrawedziLabel = new JLabel("Liczba krawędzi");
-		liczbaKrawedziTextField = new JTextField("   50000  ");
+		JLabel liczbaKrawedziLabel = new JLabel("Liczba krawędzi:");
+		liczbaKrawedziTextField = new JTextField("50000");
 		add(liczbaKrawedziLabel);
 		add(liczbaKrawedziTextField);
 		
-		JLabel poczatkowaLiczbaChorychLabel = new JLabel("poczatkowaLiczbaChorych");
-		poczatkowaLiczbaChorychTextField = new JTextField("   10  ");
+		JLabel poczatkowaLiczbaChorychLabel = new JLabel("Początkowa liczba chorych:");
+		poczatkowaLiczbaChorychTextField = new JTextField("10");
 		add(poczatkowaLiczbaChorychLabel);
 		add(poczatkowaLiczbaChorychTextField);
 		
-		JLabel liczbaZaszczepionychLabel = new JLabel("Liczba zaszczepionych");
-		liczbaZaszczepionychTextField = new JTextField("  200   ");
+		JLabel liczbaZaszczepionychLabel = new JLabel("Liczba zaszczepionych:");
+		liczbaZaszczepionychTextField = new JTextField("200");
 		add(liczbaZaszczepionychLabel);
 		add(liczbaZaszczepionychTextField);
 		
 		//strategia szczepienia
-		JLabel strategiaSzczepieniaLabel = new JLabel("Wybierz strategię szczepienia");
+		JLabel strategiaSzczepieniaLabel = new JLabel("Strategia szczepienia:");
 		strategiaSzczepieniaComboBox = new JComboBox<String>();
 		strategiaSzczepieniaComboBox.addItem("Losowo");
-		strategiaSzczepieniaComboBox.addItem("Wierzcholki z najwyzszym stopniem");
-		strategiaSzczepieniaComboBox.addItem("Losowi znajomi losowych ludzi");
-		strategiaSzczepieniaComboBox.addItem("Znajomi losowych ludzi z najwyzszym stopniem");
+		strategiaSzczepieniaComboBox.addItem("Wierzchołki z najwyższym stopniem");
+		strategiaSzczepieniaComboBox.addItem("Losowi znajomi losowych osób");
+		strategiaSzczepieniaComboBox.addItem("Znajomi losowych osób z najwyższym stopniem");
 		strategiaSzczepieniaComboBox.setSelectedIndex(0); //domyslne bedzie szczepienie losowe
 		add(strategiaSzczepieniaLabel);
 		add(strategiaSzczepieniaComboBox);
 		
-		JLabel zakaznoscPatogenuLabel = new JLabel("WspolczynnikZakaznosciPatogenu");
-		zakaznoscPatogenuTextField = new JTextField("   0.05  ");
+		JLabel zakaznoscPatogenuLabel = new JLabel("Współczynnik zakaźności patogenu:");
+		zakaznoscPatogenuTextField = new JTextField("0.05");
 		add(zakaznoscPatogenuLabel);
 		add(zakaznoscPatogenuTextField);
 		
-		JLabel sredniaPodatnoscNaInfekcjeLabel = new JLabel("srednia podatnosc na infekcje (rozklad normalny wartosci zmiennych z tego rozkladu przycinam do przedizalu[0,1])");
-		sredniaPodatnoscNaInfekcjeTextField = new JTextField("   0.5  ");
+		JLabel sredniaPodatnoscNaInfekcjeLabel = new JLabel("Średnia podatność na infekcje:");
+		sredniaPodatnoscNaInfekcjeTextField = new JTextField("0.5");
 		add(sredniaPodatnoscNaInfekcjeLabel);
 		add(sredniaPodatnoscNaInfekcjeTextField);
 
-		JLabel odchylenieStandardowePodatnosciNaInfekcjeLabel = new JLabel("odchylenie standardowe podatnosci na infekcje (2 param rozkladu normalnego, zmienne z rozkladu przycinam do przedzialu [0,1])");
-		odchylenieStandardowePodatnosciNaInfekcjeTextField = new JTextField("   0.1  ");
+		JLabel odchylenieStandardowePodatnosciNaInfekcjeLabel = new JLabel("Odchylenie standardowe podatności na infekcje:");
+		odchylenieStandardowePodatnosciNaInfekcjeTextField = new JTextField("0.1");
 		add(odchylenieStandardowePodatnosciNaInfekcjeLabel);
 		add(odchylenieStandardowePodatnosciNaInfekcjeTextField);
 		
-		JLabel czasTrwaniaChorobyLabel = new JLabel("CzasTrwaniaChorobyWDniach");
-		czasTrwaniaChorobyTextField = new JTextField("  7   ");
+		JLabel czasTrwaniaChorobyLabel = new JLabel("Czas trwania choroby w dniach:");
+		czasTrwaniaChorobyTextField = new JTextField("7");
 		add(czasTrwaniaChorobyLabel);
 		add(czasTrwaniaChorobyTextField);
 		
-		JLabel liczbaDniLabel = new JLabel("LiczbaDniSymulacji");
-		liczbaDniTextField = new JTextField("   100  ");
+		JLabel liczbaDniLabel = new JLabel("Liczba dni symulacji");
+		liczbaDniTextField = new JTextField("100");
 		add(liczbaDniLabel);
 		add(liczbaDniTextField);
 		
-		JLabel liczbaPowtorzenEpidemiiLabel = new JLabel("liczbaPowtorzenpidemii");
-		liczbaPowtorzenEpidemiiTextField = new JTextField("   1  ");
+		JLabel liczbaPowtorzenEpidemiiLabel = new JLabel("Liczba powtórzeń epidemii:");
+		liczbaPowtorzenEpidemiiTextField = new JTextField("1");
 		add(liczbaPowtorzenEpidemiiLabel);
 		add(liczbaPowtorzenEpidemiiTextField);
 		
@@ -138,13 +138,14 @@ public class MyJPanel extends JPanel{
 		switch(typSieciString){
 			case "Graf losowy":
 				return TypSieci.RANDOM;
-			case "Siec small world":
+			case "Sieć small world":
 				return TypSieci.SMALL_WORLD;
-			case "Siec scale free":
+			case "Sieć scale free":
 				return TypSieci.SCALE_FREE;
-			case "Siec hybrydowa":
+			case "Sieć hybrydowa":
 				return TypSieci.HYBRID;
 			default:
+				System.out.println("BLAAAAAD typu sieci \n\n\n\n\n\nBLAAAAAD typu sieci\n\n\n\n\n\nBLAAAAADtypu sieci");
 				return TypSieci.RANDOM;
 		}	
 	}
@@ -189,13 +190,14 @@ public class MyJPanel extends JPanel{
 		switch(strategiaSzczepieniaString){
 			case "Losowo":
 				return StrategiaSzczepienia.LOSOWE;
-			case "Wierzcholki z najwyzszym stopniem":
+			case "Wierzchołki z najwyższym stopniem":
 				return StrategiaSzczepienia.OSOBNIKI_Z_NAJWYZSZYM_STOPNIEM;
-			case "Losowi znajomi losowych ludzi":
+			case "Losowi znajomi losowych osób":
 				return StrategiaSzczepienia.WSKAZ_LOSOWEGO_ZNAJOMEGO;
-			case "Znajomi losowych ludzi z najwyzszym stopniem":
+			case "Znajomi losowych osób z najwyższym stopniem":
 				return StrategiaSzczepienia.WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM;
 			default:
+				System.out.println("BLAAAAAD strategii\n\n\n\n\n\nBLAAAAAD strategii \n\n\n\n\n\nBLAAAAAD strategii");
 				return StrategiaSzczepienia.LOSOWE;
 		}
 	}
