@@ -114,5 +114,13 @@ public class GeneratorKrawedziHybrid implements GeneratorKrawedzi{
 		}
 		return suma;
 	}
+	
+	private void printujStopnieWierzcholkow(){
+		System.out.println("/n/nStopnie wierzchołków grafu:\n");
+		for(int i=0; i<graf.getLiczbaWezlow(); i++){
+			System.out.print(graf.getStopienWierzcholka(i) + ", ");
+		}
+		System.out.println("\n");
+	}
 
 }

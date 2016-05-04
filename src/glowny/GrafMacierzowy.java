@@ -1,4 +1,4 @@
-package glowny;
+/*package glowny;
 
 
 import java.util.ArrayList;
@@ -108,4 +108,4 @@ public class GrafMacierzowy extends Graf{
 	}
 	
 
-}
+}*/

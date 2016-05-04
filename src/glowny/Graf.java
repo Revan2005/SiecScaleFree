@@ -11,6 +11,7 @@ public abstract class Graf {
 	protected int liczbaKrawedzi;
 	protected ArrayList<Osobnik> listaOsobnikow;
 	protected double ppbPrzepieciaSmallWorld_Hybrid;
+	protected double gammaMyScaleFree;
 	ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje;
 	
 	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
@@ -22,11 +23,14 @@ public abstract class Graf {
 		utworzKrawedzie();
 	}
 	
-	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld_Hybrid, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+	public Graf(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double dodatkowyParametr, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		this.typSieci = typSieci;
 		this.liczbaWezlow = liczbaWezlow;
 		this.liczbaKrawedzi = liczbaKrawedzi;
-		this.ppbPrzepieciaSmallWorld_Hybrid = ppbPrzepieciaSmallWorld_Hybrid;
+		if( (typSieci == TypSieci.HYBRID) || (typSieci == TypSieci.SMALL_WORLD) )
+			this.ppbPrzepieciaSmallWorld_Hybrid = dodatkowyParametr;
+		if(typSieci == TypSieci.MY_SCALE_FREE)
+			this.gammaMyScaleFree = dodatkowyParametr;
 		this.parametryRozkladuPodatnosciNaInfekcje = parametryRozkladuPodatnosciNaInfekcje;
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();

@@ -1,6 +1,7 @@
 package glowny;
 import java.util.ArrayList;
 
+import generatoryKrawedzi.GeneratorKrawedziAutorskiScaleFree;
 import generatoryKrawedzi.GeneratorKrawedziHybrid;
 import generatoryKrawedzi.GeneratorKrawedziRandom;
 import generatoryKrawedzi.GeneratorKrawedziScaleFree;
@@ -14,8 +15,8 @@ public class GrafListowy extends Graf{
 		super(typSieci, liczbaWezlow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
-	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double ppbPrzepieciaSmallWorld_Hybrid, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
-		super(typSieci, liczbaWezlow, liczbaKrawedzi, ppbPrzepieciaSmallWorld_Hybrid, parametryRozkladuPodatnosciNaInfekcje);
+	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double dodatkowyParametr, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
+		super(typSieci, liczbaWezlow, liczbaKrawedzi, dodatkowyParametr, parametryRozkladuPodatnosciNaInfekcje);
 	}
 	
 	@Override
@@ -41,6 +42,10 @@ public class GrafListowy extends Graf{
 			case HYBRID:
 				GeneratorKrawedziHybrid generatorHybrid = new GeneratorKrawedziHybrid(ppbPrzepieciaSmallWorld_Hybrid);
 				generatorHybrid.generujKrawedzie(this, liczbaKrawedzi);
+				break;
+			case MY_SCALE_FREE:
+				GeneratorKrawedziAutorskiScaleFree generatorAutorskiScaleFree = new GeneratorKrawedziAutorskiScaleFree(gammaMyScaleFree);
+				generatorAutorskiScaleFree.generujKrawedzie(this, liczbaKrawedzi);
 				break;
 			default:
 				break;

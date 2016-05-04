@@ -14,9 +14,11 @@ public class GeneratorKrawedziRandom implements GeneratorKrawedzi{
 	 * ja zrobie z 2 parametrami V i E gdzie dla kazdej krawedzi bede losowal ze stalym ppb
 	 * pare wierzcholkow ktore ta krwedz bedzie miala polaczyc
 	 */
+	Graf graf;
 	
 	@Override
 	public void generujKrawedzie(Graf graf, int liczbaKrawedzi) {
+		this.graf = graf;
 		Random rand = new Random();
 		int liczbaDodanychKrawedzi=0;
 		int wierzcholek1, wierzcholek2;
@@ -29,6 +31,14 @@ public class GeneratorKrawedziRandom implements GeneratorKrawedzi{
 			liczbaDodanychKrawedzi++;
 		}
 		
+	}
+	
+	private void printujStopnieWierzcholkow(){
+		System.out.println("/n/nStopnie wierzchołków grafu:\n");
+		for(int i=0; i<graf.getLiczbaWezlow(); i++){
+			System.out.print(graf.getStopienWierzcholka(i) + ", ");
+		}
+		System.out.println("\n");
 	}
 
 }

@@ -32,6 +32,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		TypSieci typSieci = myJPanel.getTypSieci();
 		double ppbPrzepieciaSmallWorld = myJPanel.getPpbPrzepieciaSmallWorld();
+		double gammaMyScaleFree = myJPanel.getGammaMyScaleFree();
 		int liczbaOsobnikow = myJPanel.getLiczbaOsobnikow();
 		int liczbaKrawedzi = myJPanel.getLiczbaKrawedzi();
 		int poczatkowaLiczbaChorych = myJPanel.getPoczatkowaLiczbaChorych();
@@ -46,6 +47,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 		
 		Controller.start(typSieci,
 				ppbPrzepieciaSmallWorld,
+				gammaMyScaleFree,
 				liczbaOsobnikow,
 				liczbaKrawedzi,
 				poczatkowaLiczbaChorych,

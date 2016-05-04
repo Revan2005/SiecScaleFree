@@ -1,18 +1,17 @@
 Parametry:
 Liczba symulacji: 1
 Każda symulacje uruchomiona na takim samym grafie (topologia sieci stała w czasie eksperymentu)
-Typ sieci: HYBRID
-Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: 0.3
+Typ sieci: SCALE_FREE
 Liczba wierzchołków w grafie: 10000
 Żądana iczba krawędzi grafu: 50000
-Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 49989 (błąd: 0.022000000000000002%)
-Średni stopień wierzchołka w grafie: 9.9978
+Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 50000 (błąd: 0.0%)
+Średni stopień wierzchołka w grafie: 10.0
 Początkowa liczba chorych: 10
-Strategia szczepienia: WSKAZ_ZNAJOMEGO_Z_NAJWYZSZYM_STOPNIEM
+Strategia szczepienia: LOSOWE
 Liczba zaszczepionych: 200
 Współczynnik zakaźności patogenu: 0.05
 Współczynnik podatności na infekcje: 
 	- średnia: 0.5
 	- odchylenie standardowe: 0.1
-Czas trwania choroby: 7 dni
+Czas trwania choroby: 5 dni
 Czas trwania symulacji: 100 dni

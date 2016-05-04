@@ -9,6 +9,7 @@ public class PanelSterowania {
 	private static Graf graf;
 	private static TypSieci typSieci;
 	private static double ppbPrzepieciaSmallWorld;
+	private static double gammaMyScaleFree;
 	private static int liczbaOsobnikow;
 	private static int liczbaKrawedzi;
 	private static int poczatkowaLiczbaChorych;
@@ -22,6 +23,7 @@ public class PanelSterowania {
 	private static boolean wszystkieSymulacjeNaJednymGrafie;
 	private static double sredniaRzeczywistaLiczbaKrawedzi;
 	
+	/*
 	public static void uruchomZParametrami( TypSieci _typSieci,
 											int _liczbaOsobnikow, 
 											int _liczbaKrawedzi, 
@@ -56,9 +58,11 @@ public class PanelSterowania {
 			powtorzEpidemieNRazyZaKazdymRazemTworzacNowyGraf(_liczbaPowtorzenEpidemii);
 		}
 	}
+	*/
 	
 	public static void uruchomZParametrami( TypSieci _typSieci,
 											double _ppbPrzepieciaSmallWorld,
+											double _gammaMyScaleFree,
 											int _liczbaOsobnikow, 
 											int _liczbaKrawedzi, 
 											int _poczatkowaLiczbaChorych,
@@ -73,6 +77,7 @@ public class PanelSterowania {
 		typSieci = _typSieci; // kiedy wybieram smallworld to musze dopisac
 		//do konstruktora GrafListowy parametr odpowiedzialny za ppb przepiecia
 		ppbPrzepieciaSmallWorld = _ppbPrzepieciaSmallWorld;
+		gammaMyScaleFree = _gammaMyScaleFree;
 		liczbaOsobnikow = _liczbaOsobnikow;
 		liczbaKrawedzi = _liczbaKrawedzi; //kazdy ma srednio liczbaKrawedzi*2 / liczbaWierzholkow polaczen
 		poczatkowaLiczbaChorych = _poczatkowaLiczbaChorych;
@@ -100,10 +105,13 @@ public class PanelSterowania {
 		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		
 		//tworze graf, a w kolejnych iteracjach bede go resetowal, topologia bedize stala w obrebie eksperymentu (wszystkich symulacji)
-		if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
+		if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) ){
 			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
-		else
+		} else if(typSieci == TypSieci.MY_SCALE_FREE){
+			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, gammaMyScaleFree, parametryRozkladuPodatnosciNaInfekcje);
+		} else {
 			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
+		}
 		sredniaRzeczywistaLiczbaKrawedzi = graf.getRzeczywistaLiczbaKrawedzi();
 		
 		for(int i=0; i<liczbaSymulacji; i++){
@@ -179,10 +187,13 @@ public class PanelSterowania {
 		sredniaRzeczywistaLiczbaKrawedzi = 0;
 		
 		for(int i=0; i<liczbaSymulacji; i++){
-			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
+			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) ){
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, ppbPrzepieciaSmallWorld, parametryRozkladuPodatnosciNaInfekcje);
-			else
+			} else if(typSieci == TypSieci.MY_SCALE_FREE){
+				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, gammaMyScaleFree, parametryRozkladuPodatnosciNaInfekcje);
+			} else {
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
+			}
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
 			
 			sredniaRzeczywistaLiczbaKrawedzi += graf.getRzeczywistaLiczbaKrawedzi();

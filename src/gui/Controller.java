@@ -60,6 +60,7 @@ public class Controller {
 	
 	public static void start(TypSieci typSieci,
 			double ppbPrzepieciaSmallWorld,
+			double gammaMyScaleFree,
 			int liczbaOsobnikow, 
 			int liczbaKrawedzi, 
 			int poczatkowaLiczbaChorych,
@@ -74,6 +75,7 @@ public class Controller {
 		PanelSterowania.uruchomZParametrami(
 				typSieci,
 				ppbPrzepieciaSmallWorld,
+				gammaMyScaleFree,
 				liczbaOsobnikow,
 				liczbaKrawedzi,
 				poczatkowaLiczbaChorych,

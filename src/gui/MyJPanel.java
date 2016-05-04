@@ -19,6 +19,7 @@ public class MyJPanel extends JPanel{
 	
 	private JComboBox<String> typSieciComboBox;
 	private JTextField ppbPrzepieciaTextField;
+	private JTextField gammaTextField;
 	private JComboBox<String> strategiaSzczepieniaComboBox;
 	private JTextField liczbaOsobnikowTextField;
 	private JTextField liczbaKrawedziTextField;
@@ -42,6 +43,7 @@ public class MyJPanel extends JPanel{
 		typSieciComboBox.addItem("Sieć small world");
 		typSieciComboBox.addItem("Sieć scale free");
 		typSieciComboBox.addItem("Sieć hybrydowa"); //hybrydowa = small world + scale free
+		typSieciComboBox.addItem("Autorska implementacja sieci scale free");
 		typSieciComboBox.setSelectedIndex(1); //ustawiam domyslnie na small world
 		add(typSieciLabel);
 		add(typSieciComboBox);
@@ -50,6 +52,11 @@ public class MyJPanel extends JPanel{
 		ppbPrzepieciaTextField = new JTextField("0.3");
 		add(ppbPrzepieciaLabel);
 		add(ppbPrzepieciaTextField);
+		
+		JLabel gammaLabel = new JLabel("Współczynnik gamma (dotyczy  autorskiej implementacji sieci scale free):");
+		gammaTextField = new JTextField("2.1");
+		add(gammaLabel);
+		add(gammaTextField);
 		
 		JLabel liczbaOsobnikowLabel = new JLabel("Liczba osobników:");
 		liczbaOsobnikowTextField = new JTextField("10000");
@@ -98,7 +105,7 @@ public class MyJPanel extends JPanel{
 		add(odchylenieStandardowePodatnosciNaInfekcjeTextField);
 		
 		JLabel czasTrwaniaChorobyLabel = new JLabel("Czas trwania choroby w dniach:");
-		czasTrwaniaChorobyTextField = new JTextField("7");
+		czasTrwaniaChorobyTextField = new JTextField("5");
 		add(czasTrwaniaChorobyLabel);
 		add(czasTrwaniaChorobyTextField);
 		
@@ -144,6 +151,8 @@ public class MyJPanel extends JPanel{
 				return TypSieci.SCALE_FREE;
 			case "Sieć hybrydowa":
 				return TypSieci.HYBRID;
+			case "Autorska implementacja sieci scale free":
+				return TypSieci.MY_SCALE_FREE;
 			default:
 				System.out.println("BLAAAAAD typu sieci \n\n\n\n\n\nBLAAAAAD typu sieci\n\n\n\n\n\nBLAAAAADtypu sieci");
 				return TypSieci.RANDOM;
@@ -155,6 +164,13 @@ public class MyJPanel extends JPanel{
 		ppbString = ppbString.trim();
 		double ppb = Double.parseDouble(ppbString);
 		return ppb;
+	}
+	
+	public double getGammaMyScaleFree(){
+		String gammaString = gammaTextField.getText();
+		gammaString = gammaString.trim();
+		double gamma = Double.parseDouble(gammaString);
+		return gamma;
 	}
 	
 	public int getLiczbaOsobnikow(){

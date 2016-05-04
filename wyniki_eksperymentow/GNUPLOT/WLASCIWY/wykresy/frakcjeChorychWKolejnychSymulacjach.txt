@@ -1,11 +1,11 @@
 FrakcjeChorychWKolejnychSymulacjach: 
-[0.6716]
+[0.52]
 
-Średnia = 0.6716
+Średnia = 0.52
 Odchylenie stndardowe = NaN
 
-0.6716
+0.52
 NaN
 
 
-0.6716 NaN
+0.52 NaN
