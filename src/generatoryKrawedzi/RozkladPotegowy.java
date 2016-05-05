@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 public class RozkladPotegowy {
 	private double[] dystrybuanta;
+	private double[] znormalizowanyRozklad;
 	private double gamma;
 	private int a;
 	private int b;
@@ -27,7 +28,7 @@ public class RozkladPotegowy {
 		for(int i = a; i <= b; i++){
 			suma += Math.pow(i, -gamma);
 		}
-		double[] znormalizowanyRozklad = new double[(b-a)+1];
+		znormalizowanyRozklad = new double[(b-a)+1];
 		int j = 0;
 		for(int i = a; i <= b; i++){
 			znormalizowanyRozklad[j] = Math.pow(i, -gamma) / suma;
@@ -55,5 +56,29 @@ public class RozkladPotegowy {
 		}
 		//System.out.println("probkaZRozkladu: " + probkaZRozkladu);
 		return probkaZRozkladu;
+	}
+	
+	public double getSrednia(){
+		double srednia = 0;
+		int j=0;
+		for(int i = a; i <= b; i++){
+			srednia += znormalizowanyRozklad[j] * j;
+			j++;
+		}
+		return srednia;
+	}
+	
+	public void printujZnormalizowanyRozklad(){
+		//System.out.println("Rozklad: " + Arrays.toString(znormalizowanyRozklad));
+		double suma = 0;
+		double srednia = 0;
+		int j=0;
+		for(int i = a; i <= b; i++){
+			suma += znormalizowanyRozklad[j];
+			srednia += znormalizowanyRozklad[j] * j;
+			j++;
+		}
+		System.out.println("Suma rozkładu: " + suma);
+		System.out.println("Średnia rozkładu: " + srednia);
 	}
 }

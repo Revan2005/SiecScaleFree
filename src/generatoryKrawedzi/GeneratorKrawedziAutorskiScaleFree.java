@@ -14,6 +14,7 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 	private int[] oczekiwanyStopienWierzcholka;
 	private double[] rozkladPpbPrzylaczeniaKrawedzi;
 	private double[] dystrybuantaPpbPrzylaczeniaKrawedzi;
+	int b;
 
 	public GeneratorKrawedziAutorskiScaleFree(double gamma) {
 		this.gamma = gamma;
@@ -24,6 +25,7 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 		// TODO Auto-generated method stub
 		this.graf = graf;
 		this.liczbaKrawedzi = liczbaKrawedzi;
+		this.b = graf.getLiczbaWezlow() - 1;
 		
 		przyporzadkujOczekiwaneStopnieWierzchokkowZRozkladuPotegowego();
 		przyporzadkujPpbPrzylaczeniaKrawedzi();
@@ -49,9 +51,8 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 	
 	private void przyporzadkujOczekiwaneStopnieWierzchokkowZRozkladuPotegowego(){
 		oczekiwanyStopienWierzcholka = new int[graf.getLiczbaWezlow()];
-		int a = getPrzesuniecie();
-		int b = graf.getLiczbaWezlow() - 1;
-		RozkladPotegowy rozkladPotegowy = new RozkladPotegowy(gamma, a, b);
+		int przesuniecie = getPrzesuniecie();
+		RozkladPotegowy rozkladPotegowy = new RozkladPotegowy(gamma, przesuniecie, b);
 		for(int i = 0; i < oczekiwanyStopienWierzcholka.length; i++)
 			oczekiwanyStopienWierzcholka[i] = rozkladPotegowy.losuj();	
 	}
@@ -59,10 +60,22 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 	private int getPrzesuniecie(){
 		/*
 		 * nazwa tez kiepska przyadloby sie lepsz wymyslic
-		 * 
-		 * zmienic!!!! to ma byc liczone na podstawie zadanej przez uzytkownika liczby krawedzi
 		 */
-		return 1;
+		double zadanySredniStopienWierzcholka = (liczbaKrawedzi * 2.0) / graf.getLiczbaWezlow();
+		double otrzymanySredniStopienWierzcholkaPoprzedni = new RozkladPotegowy(gamma, 1, b).getSrednia();
+		double otrzymanySredniStopienWierzcholkaKolejny = new RozkladPotegowy(gamma, 2, b).getSrednia();
+		int indeksPoprzedniego = 1;
+		while( Math.abs(otrzymanySredniStopienWierzcholkaKolejny - zadanySredniStopienWierzcholka) < 
+				Math.abs(otrzymanySredniStopienWierzcholkaPoprzedni - zadanySredniStopienWierzcholka) ){
+			indeksPoprzedniego++;
+			otrzymanySredniStopienWierzcholkaPoprzedni = new RozkladPotegowy(gamma, indeksPoprzedniego, b).getSrednia();
+			otrzymanySredniStopienWierzcholkaKolejny = new RozkladPotegowy(gamma, indeksPoprzedniego + 1, b).getSrednia();
+			//System.out.println("oczekiwany: "+zadanySredniStopienWierzcholka+"  poprzedni: "+otrzymanySredniStopienWierzcholkaPoprzedni +"  kolejny: " + otrzymanySredniStopienWierzcholkaKolejny);
+		}
+		int przesuniecie = indeksPoprzedniego;
+		//for(int i=0; i<10; i++)
+		//	System.out.println("i: "+i+"  przesuniecie: "+przesuniecie+"  zadany: "+zadanySredniStopienWierzcholka+" otrzymany: "+new RozkladPotegowy(gamma, przesuniecie, b).getSrednia());
+		return przesuniecie;
 	}
 	
 	private void przyporzadkujPpbPrzylaczeniaKrawedzi(){

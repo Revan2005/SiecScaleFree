@@ -1,7 +1,7 @@
 Parametry:
 Liczba symulacji: 1
 Każda symulacje uruchomiona na takim samym grafie (topologia sieci stała w czasie eksperymentu)
-Typ sieci: SCALE_FREE
+Typ sieci: MY_SCALE_FREE
 Liczba wierzchołków w grafie: 10000
 Żądana iczba krawędzi grafu: 50000
 Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): 50000 (błąd: 0.0%)
