@@ -76,6 +76,7 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 		//for(int i=0; i<10; i++)
 		//	System.out.println("i: "+i+"  przesuniecie: "+przesuniecie+"  zadany: "+zadanySredniStopienWierzcholka+" otrzymany: "+new RozkladPotegowy(gamma, przesuniecie, b).getSrednia());
 		return przesuniecie;
+		//return 1;
 	}
 	
 	private void przyporzadkujPpbPrzylaczeniaKrawedzi(){

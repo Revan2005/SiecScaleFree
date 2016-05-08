@@ -184,6 +184,7 @@ public class PanelSterowania {
 		int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiLiczbyOdpornychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		int[][] stopnieWierzcholkowWKolejnychSymulacjach = new int[liczbaSymulacji][liczbaOsobnikow];
 		sredniaRzeczywistaLiczbaKrawedzi = 0;
 		
 		for(int i=0; i<liczbaSymulacji; i++){
@@ -195,6 +196,10 @@ public class PanelSterowania {
 				graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 			}
 			ModelSzczepienia.zaszczep(strategiaSzczepienia, graf,  liczbaZaszczepionych);
+			
+			if( (typSieci == TypSieci.MY_SCALE_FREE) || (typSieci == TypSieci.SCALE_FREE) ){
+				stopnieWierzcholkowWKolejnychSymulacjach[i] = graf.getTablicaStopniWierzcholkow();
+			}
 			
 			sredniaRzeczywistaLiczbaKrawedzi += graf.getRzeczywistaLiczbaKrawedzi();
 			
@@ -242,6 +247,10 @@ public class PanelSterowania {
 		}
 		sredniaRzeczywistaLiczbaKrawedzi /= liczbaSymulacji;
 		
+		if( (typSieci == TypSieci.MY_SCALE_FREE) || (typSieci == TypSieci.SCALE_FREE) ){
+			obliczIWyswietlSrednieCzestosciStopniWierzcholkow(stopnieWierzcholkowWKolejnychSymulacjach, liczbaSymulacji);
+		}
+
 		wyswietlWykres(
 				frakcjeChorychWKolejnychSymulacjach, 
 				wynikiNSymulacjiLiczbyChorychKazdegoDnia, 
@@ -262,6 +271,26 @@ public class PanelSterowania {
 				wynikiNSymulacjiLiczbyOdpornychKazdegoDnia, 
 				wynikiNSymulacjiLiczbyZdrowychKazdegoDnia, 
 				wynikiNSymulacjiZachorowalnoscKazdegoDnia);
+	}
+	
+	private static void obliczIWyswietlSrednieCzestosciStopniWierzcholkow(int[][] stopnieWierzcholkowWKolejnychSymulacjach, int liczbaSymulacji){
+		double[] srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach = new double[liczbaOsobnikow];
+		int sumaCzestosci;
+		double sredniaCzestosc;
+		for(int liczbaSasiadow=0; liczbaSasiadow<liczbaOsobnikow; liczbaSasiadow++){
+			sumaCzestosci = 0;
+			for(int symulacja=0; symulacja<liczbaSymulacji; symulacja++){
+				for(int osobnik=0; osobnik<liczbaOsobnikow; osobnik++){
+					if(stopnieWierzcholkowWKolejnychSymulacjach[symulacja][osobnik] == liczbaSasiadow){
+						sumaCzestosci++;
+					}
+				}
+			}
+			sredniaCzestosc = (double)sumaCzestosci / liczbaSymulacji;
+			srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach[liczbaSasiadow] = sredniaCzestosc;
+		}
+		System.out.println("\nŚredni rozkład stopni wierzchołków: ");
+		System.out.println(Arrays.toString(srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach) + "\n");
 	}
 	
 	private static void printujWyniki(
