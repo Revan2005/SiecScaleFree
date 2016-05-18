@@ -3,6 +3,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.jfree.data.statistics.Regression;
+
 import plot.*;
 
 public class PanelSterowania {
@@ -10,6 +16,7 @@ public class PanelSterowania {
 	private static TypSieci typSieci;
 	private static double ppbPrzepieciaSmallWorld;
 	private static double gammaMyScaleFree;
+	private static double srednieOtrzymaneGammaMyScaleFree;
 	private static int liczbaOsobnikow;
 	private static int liczbaKrawedzi;
 	private static int poczatkowaLiczbaChorych;
@@ -22,6 +29,7 @@ public class PanelSterowania {
 	private static int liczbaPowtorzenEpidemii;
 	private static boolean wszystkieSymulacjeNaJednymGrafie;
 	private static double sredniaRzeczywistaLiczbaKrawedzi;
+	//private static double[] srednieCzestosciStopniWierzcholkow;
 	
 	/*
 	public static void uruchomZParametrami( TypSieci _typSieci,
@@ -103,6 +111,7 @@ public class PanelSterowania {
 		int[][] wynikiNSymulacjiLiczbyZdrowychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiLiczbyOdpornychKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
+		int[][] stopnieWierzcholkowWKolejnychSymulacjach = new int[1][liczbaOsobnikow];
 		
 		//tworze graf, a w kolejnych iteracjach bede go resetowal, topologia bedize stala w obrebie eksperymentu (wszystkich symulacji)
 		if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) ){
@@ -112,7 +121,16 @@ public class PanelSterowania {
 		} else {
 			graf = new GrafListowy(typSieci, liczbaOsobnikow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
 		}
+		
+		if( (typSieci == TypSieci.MY_SCALE_FREE) || (typSieci == TypSieci.SCALE_FREE) ){
+			stopnieWierzcholkowWKolejnychSymulacjach[0] = graf.getTablicaStopniWierzcholkow();
+		}
+		
+		if(typSieci == TypSieci.MY_SCALE_FREE){
+			obliczSrednieOtrzymaneGamma(stopnieWierzcholkowWKolejnychSymulacjach, 1);
+		}
 		sredniaRzeczywistaLiczbaKrawedzi = graf.getRzeczywistaLiczbaKrawedzi();
+		
 		
 		for(int i=0; i<liczbaSymulacji; i++){
 			//tu miejsce na zresetowanie grafu
@@ -186,6 +204,7 @@ public class PanelSterowania {
 		int[][] wynikiNSymulacjiZachorowalnoscKazdegoDnia = new int[liczbaSymulacji][liczbaDni];
 		int[][] stopnieWierzcholkowWKolejnychSymulacjach = new int[liczbaSymulacji][liczbaOsobnikow];
 		sredniaRzeczywistaLiczbaKrawedzi = 0;
+		srednieOtrzymaneGammaMyScaleFree = 0;
 		
 		for(int i=0; i<liczbaSymulacji; i++){
 			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) ){
@@ -250,6 +269,9 @@ public class PanelSterowania {
 		if( (typSieci == TypSieci.MY_SCALE_FREE) || (typSieci == TypSieci.SCALE_FREE) ){
 			obliczIWyswietlSrednieCzestosciStopniWierzcholkow(stopnieWierzcholkowWKolejnychSymulacjach, liczbaSymulacji);
 		}
+		if(typSieci == TypSieci.MY_SCALE_FREE){
+			obliczSrednieOtrzymaneGamma(stopnieWierzcholkowWKolejnychSymulacjach, liczbaSymulacji);
+		}
 
 		wyswietlWykres(
 				frakcjeChorychWKolejnychSymulacjach, 
@@ -274,7 +296,14 @@ public class PanelSterowania {
 	}
 	
 	private static void obliczIWyswietlSrednieCzestosciStopniWierzcholkow(int[][] stopnieWierzcholkowWKolejnychSymulacjach, int liczbaSymulacji){
-		double[] srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach = new double[liczbaOsobnikow];
+		double[] srednieCzestosci =
+				obliczSrednieCzestosciStopniWierzcholkow(stopnieWierzcholkowWKolejnychSymulacjach, liczbaSymulacji);
+		System.out.println("\nŚredni rozkład stopni wierzchołków: ");
+		System.out.println(Arrays.toString(srednieCzestosci) + "\n");
+	}
+	
+	private static double[] obliczSrednieCzestosciStopniWierzcholkow(int[][] stopnieWierzcholkowWKolejnychSymulacjach, int liczbaSymulacji){
+		double[] srednieCzestosci = new double[liczbaOsobnikow];
 		int sumaCzestosci;
 		double sredniaCzestosc;
 		for(int liczbaSasiadow=0; liczbaSasiadow<liczbaOsobnikow; liczbaSasiadow++){
@@ -287,11 +316,47 @@ public class PanelSterowania {
 				}
 			}
 			sredniaCzestosc = (double)sumaCzestosci / liczbaSymulacji;
-			srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach[liczbaSasiadow] = sredniaCzestosc;
+			srednieCzestosci[liczbaSasiadow] = sredniaCzestosc;
 		}
-		System.out.println("\nŚredni rozkład stopni wierzchołków: ");
-		System.out.println(Arrays.toString(srednieCzestosciStopniWierzcholkowWPoszczegoolnychSymulacjach) + "\n");
+		//srednieCzestosciStopniWierzcholkow = srednieCzestosci;
+		return srednieCzestosci;
 	}
+	
+	private static void obliczSrednieOtrzymaneGamma(int[][] stopnieWierzcholkowWKolejnychSymulacjach, int liczbaSymulacji){
+		if(typSieci != TypSieci.MY_SCALE_FREE){
+			JOptionPane.showMessageDialog(new JFrame(), "Error");
+		}
+		double[] srednieCzestosciLiczbyWierzcholkow = obliczSrednieCzestosciStopniWierzcholkow(stopnieWierzcholkowWKolejnychSymulacjach, liczbaSymulacji);
+		int przesuniecie = graf.getPrzesuniecieMyScaleFree();
+		int poczatekPrzedzialu = przesuniecie;
+		double wartoscOczekiwanaLiczbyWierzcholkow = liczbaOsobnikow;
+		int k = przesuniecie;
+		double suma = 0;
+		for(int i=przesuniecie; i<liczbaOsobnikow; i++)
+			suma += Math.pow(i, -gammaMyScaleFree);
+		while( (wartoscOczekiwanaLiczbyWierzcholkow > 1) && (k < liczbaOsobnikow) ){
+			wartoscOczekiwanaLiczbyWierzcholkow = liczbaOsobnikow * Math.pow(k, -gammaMyScaleFree) / suma;
+			k++;
+		}
+		int koniecPrzedzialu = k-1; //ostatnie k przy ktorym wart oczekiwana l wierzcholkow z tym stopniem jest >= 1
+		
+		double gamma = getGammaNaPrzedziale(srednieCzestosciLiczbyWierzcholkow, przesuniecie, koniecPrzedzialu);
+		srednieOtrzymaneGammaMyScaleFree = gamma;
+	}
+	
+	private static double getGammaNaPrzedziale(double[] uzyskaneCzestosci, int poczatek, int koniec){
+		double[][] data = new double[koniec - poczatek +1][2];
+		//System.out.println("poczatek ="+poczatek+" koniec = "+koniec+" uzyskaneCzestosci[2] = "+uzyskaneCzestosci[2]);
+		for(int i=poczatek; i<=koniec; i++){
+			data[i-poczatek][0] = i; //x
+			data[i-poczatek][1] = uzyskaneCzestosci[i]; //y
+			//System.out.print(" "+uzyskaneCzestosci[i]);
+		}
+		double[] alfaGamma = Regression.getPowerRegression(data);
+		double gamma = -alfaGamma[1];
+		return gamma;
+	}
+	
 	
 	private static void printujWyniki(
 			double[] frakcjeChorychWKolejnychSymulacjach,
@@ -309,6 +374,11 @@ public class PanelSterowania {
 		double[] odchylenieStandardoweZNSymulacjiLiczbyOdpornychKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiLiczbyOdpornychKazdegoDnia);
 		double[] odchylenieStandardoweZNSymulacjiZachorowalnoscKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiZachorowalnoscKazdegoDnia);
 		
+		System.out.println("Typ sieci: " + typSieci);
+		if(typSieci == TypSieci.MY_SCALE_FREE){
+			System.out.println("Zadane gamma: " + gammaMyScaleFree);
+			System.out.println("Średnie uzyskane gamma: " + srednieOtrzymaneGammaMyScaleFree);
+		}
 		System.out.println( "I srednia: " + Arrays.toString(sredniaZNSymulacjiLiczbyChorychKazdegoDnia) );
 		System.out.println( "I odch. st.: " + Arrays.toString(odchylenieStandardoweZNSymulacjiLiczbyChorychKazdegoDnia) );
 		System.out.println( "S srednia: " + Arrays.toString(sredniaZNSymulacjiLiczbyZdrowychKazdegoDnia) );
@@ -387,11 +457,13 @@ public class PanelSterowania {
 		double[] odchylenieStandardoweZNSymulacjiLiczbyOdpornychKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiLiczbyOdpornychKazdegoDnia);
 		double[] odchylenieStandardoweZNSymulacjiZachorowalnoscKazdegoDnia = obliczTabliceOdchylenStandardowych(wynikiNSymulacjiZachorowalnoscKazdegoDnia);
 		
-		String sciezka = "/home/tomek/workspace/MGR/ModelowanieEpidemii/wyniki_eksperymentow/GNUPLOT/WLASCIWY/";
-		File sOutputFile = new File(sciezka + "s.dat");
-		File iOutputFile = new File(sciezka + "i.dat");
-		File rOutputFile = new File(sciezka + "r.dat");
-		File zOutputFile = new File(sciezka + "z.dat");
+		//String sciezka = "/home/tomek/workspace/MGR/ModelowanieEpidemii/wyniki_eksperymentow/GNUPLOT/WLASCIWY/";
+		String sciezka = System.getProperty("user.dir") + "/wyniki_eksperymentow/GNUPLOT/";
+		//System.out.println("sciezka = " + sciezka);
+		File sOutputFile = new File(sciezka + "dane/s.dat");
+		File iOutputFile = new File(sciezka + "dane/i.dat");
+		File rOutputFile = new File(sciezka + "dane/r.dat");
+		File zOutputFile = new File(sciezka + "dane/z.dat");
 		try {
 			FileWriter sWriter = new FileWriter(sOutputFile);
 			FileWriter iWriter = new FileWriter(iOutputFile);
@@ -432,16 +504,14 @@ public class PanelSterowania {
 			frakcjeChorychWriter.write(sredniaZFrakcjiChorychWKolejnychSymulacjach + " " + odchylenieStandardoweZFrakcjiChorychWKolejnychSymulacjach + "\n");
 			frakcjeChorychWriter.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private static void uruchomSkryptTworzacyWykresyWKatalogu(String sciezka){
+	private static void uruchomSkryptTworzacyWykresyWKatalogu(String sciezka){;
 		try {
-			Runtime.getRuntime().exec(sciezka + "generujWykresy.sh");
+			Runtime.getRuntime().exec(sciezka + "skrypty/generujWykresy.sh");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -466,10 +536,14 @@ public class PanelSterowania {
 			parametryWriter.write("Typ sieci: " + typSieci + "\n");
 			if( (typSieci == TypSieci.SMALL_WORLD) || (typSieci == TypSieci.HYBRID) )
 				parametryWriter.write("Prawdopodobieństwo przepięcia krawędzi podczas generowania grafu: " + ppbPrzepieciaSmallWorld + "\n");
+			if( typSieci == TypSieci.MY_SCALE_FREE ){
+				parametryWriter.write("Zadana wartość parametru gamma: " + gammaMyScaleFree + "\n");
+				parametryWriter.write("Otrzymana wartość gamma (dla uśrednionego rozkładu częstości stopni wierzchołków): " + srednieOtrzymaneGammaMyScaleFree);
+			}
 			parametryWriter.write("Liczba wierzchołków w grafie: " + liczbaOsobnikow + "\n");
-			parametryWriter.write("Żądana iczba krawędzi grafu: " + liczbaKrawedzi + "\n");
+			parametryWriter.write("Żądana liczba krawędzi grafu: " + liczbaKrawedzi + "\n");
 			if(wszystkieSymulacjeNaJednymGrafie){
-				parametryWriter.write("Rzeczywista liczba krawędzi grafu (różnica wynika z własnośc zastosowanego algorytmu): "
+				parametryWriter.write("Rzeczywista liczba krawędzi grafu (różnica wynika z własności zastosowanego algorytmu): "
 						+ graf.getRzeczywistaLiczbaKrawedzi());
 				double blad = (double)Math.abs(liczbaKrawedzi - graf.getRzeczywistaLiczbaKrawedzi()) / liczbaKrawedzi;
 				blad *= 100;

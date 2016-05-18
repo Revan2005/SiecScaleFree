@@ -1,6 +1,9 @@
 package glowny;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import generatoryKrawedzi.GeneratorKrawedziAutorskiScaleFree;
 import generatoryKrawedzi.GeneratorKrawedziHybrid;
 import generatoryKrawedzi.GeneratorKrawedziRandom;
@@ -10,6 +13,7 @@ import generatoryKrawedzi.GeneratorKrawedziSmallWorld;
 
 public class GrafListowy extends Graf{
 	private ArrayList<ArrayList<Integer>> listaPolaczen;
+	private int przesuniecie;
 	
 	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		super(typSieci, liczbaWezlow, liczbaKrawedzi, parametryRozkladuPodatnosciNaInfekcje);
@@ -17,6 +21,14 @@ public class GrafListowy extends Graf{
 	
 	public GrafListowy(TypSieci typSieci, int liczbaWezlow, int liczbaKrawedzi, double dodatkowyParametr, ParametryRozkladu parametryRozkladuPodatnosciNaInfekcje){
 		super(typSieci, liczbaWezlow, liczbaKrawedzi, dodatkowyParametr, parametryRozkladuPodatnosciNaInfekcje);
+	}
+	
+	@Override
+	public int getPrzesuniecieMyScaleFree(){
+		if(typSieci != TypSieci.MY_SCALE_FREE){
+			JOptionPane.showMessageDialog(new JFrame(), "Error");
+		}
+		return przesuniecie;
 	}
 	
 	@Override
@@ -46,6 +58,7 @@ public class GrafListowy extends Graf{
 			case MY_SCALE_FREE:
 				GeneratorKrawedziAutorskiScaleFree generatorAutorskiScaleFree = new GeneratorKrawedziAutorskiScaleFree(gammaMyScaleFree);
 				generatorAutorskiScaleFree.generujKrawedzie(this, liczbaKrawedzi);
+				przesuniecie = generatorAutorskiScaleFree.getPrzesuniecie();
 				break;
 			default:
 				break;

@@ -18,7 +18,7 @@ public class MyJFrame extends JFrame implements ActionListener {
 	public MyJFrame(){
 		super("Hello World");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 600);
+		setSize(730, 600);
 		setLayout(new BorderLayout());
 		myJPanel = new MyJPanel();
 		add(myJPanel, BorderLayout.CENTER);

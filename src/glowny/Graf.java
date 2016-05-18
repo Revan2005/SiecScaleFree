@@ -2,6 +2,9 @@ package glowny;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 
 
 
@@ -35,6 +38,8 @@ public abstract class Graf {
 		inicjalizujListeOsobnikow();
 		utworzKrawedzie();
 	} 
+	
+	public abstract int getPrzesuniecieMyScaleFree();
 	
 	public void reset(){
 		// wystarczy ustawic stan kazdego osobnika na ZDROWY, reszta pozostaje bez zmian, taka sama populacja tylko ze na nowo zdrowa i gotowa 

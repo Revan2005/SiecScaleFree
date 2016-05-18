@@ -57,7 +57,7 @@ public class GeneratorKrawedziAutorskiScaleFree implements GeneratorKrawedzi {
 			oczekiwanyStopienWierzcholka[i] = rozkladPotegowy.losuj();	
 	}
 	
-	private int getPrzesuniecie(){
+	public int getPrzesuniecie(){
 		/*
 		 * nazwa tez kiepska przyadloby sie lepsz wymyslic
 		 */

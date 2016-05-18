@@ -1,0 +1,18 @@
+Parametry:
+Liczba symulacji: 10
+Przed każdą symulacją losowany nowy graf (parametry sieci stałe, ale topologia sieci zmienna) 
+Typ sieci: MY_SCALE_FREE
+Zadana wartość parametru gamma: 2.345
+Otrzymana wartość gamma (dla uśrednionego rozkładu częstości stopni wierzchołków): 2.4137962395535255Liczba wierzchołków w grafie: 10000
+Żądana liczba krawędzi grafu: 50000
+Średnia rzeczywista liczba krawędzi grafu (różnica wynika z własności zastosowanego algorytmu): 50000.0 (błąd: 0.0%)
+Średni stopień wierzchołka w grafie (uśredniony po wierzchołkach i symulacjach): 10.0
+Początkowa liczba chorych: 10
+Strategia szczepienia: LOSOWE
+Liczba zaszczepionych: 200
+Współczynnik zakaźności patogenu: 0.05
+Współczynnik podatności na infekcje: 
+	- średnia: 0.5
+	- odchylenie standardowe: 0.1
+Czas trwania choroby: 5 dni
+Czas trwania symulacji: 100 dni
